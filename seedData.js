@@ -3,6 +3,7 @@ var _ = require('underscore')._;
 var request = require('request');
 var moment = require('moment');
 var csv = require('csv');
+var fs = require('fs');
 
 var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
 
@@ -13,11 +14,7 @@ var mongoOptions = {
 };
 
 mongoose.connect(uristring, mongoOptions, function(err, res) {
-	// if (err) {
-	// console.log('ERROR connecting to: ' + uristring + '. ' + err);
-	// } else {
-	// console.log('Succeeded connected to: ' + uristring);
-	// }
+	
 });
 
 var tripSchema = new mongoose.Schema({
@@ -35,26 +32,35 @@ var tripSchema = new mongoose.Schema({
 	}
 })
 
-var shuttleTrips = mongoose.model('ShuttleTrips', tripSchema);
-console.log(moment('12/01/2010'))
+var shuttleTrip = mongoose.model('ShuttleTrips', tripSchema);
 
-csv().from.stream(fs.createReadStream(__dirname + '/seeddata.js').transform(function(data) {
-	console.log(data)
-	//sleep.sleep(1)
-}))
-// //
-// // value = getLatLng()
-// //console.log(lat)
-// // data.push('test')
-// return data;
-// }).
-// on('record', function(data, index) {
-//
-// console.log('#' + index + ' ' + JSON.stringify(data));
-//
-// }).on('end', function(count) {
-// console.log('Number of lines: ' + count);
-// }).on('error', function(error) {
-// console.log(error.message);
-// });
+shuttleTrip.find({}).remove();
 
+var count = 0;
+
+console.log(moment('12/01/2010').format())
+
+csv().from.stream(fs.createReadStream(__dirname + '/seeddata.csv')).to.path(__dirname + '/sample.out').transform(function(row) {
+
+	//console.log(row[0])
+	return row;
+}).on('record', function(row, index) {
+	//console.log('#' + index + ' ' + JSON.stringify(row));
+	var dataRecord = new shuttleTrip({
+		pickupTime : moment(row[0] + ' EDT').format(),
+		pickupLocation : row[1],
+		dropoffLocation : row[2],
+		dropoffTime : moment(row[3] + ' EDT').format(),
+	})
+	count++;
+	dataRecord.save(function(err) {
+		if (count == 5) {
+			mongoose.connection.close()
+
+		}
+	})
+}).on('end', function(count) {
+	//console.log('Number of lines: ' + count);
+}).on('error', function(error) {
+	console.log(error.message);
+});
