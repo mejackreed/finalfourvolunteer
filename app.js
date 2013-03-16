@@ -31,6 +31,7 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
+app.get('/shuttle', routes.shuttle);
 
 // JSON API
 

@@ -1,17 +1,21 @@
 !!!
 html
-    meta(charset='utf8')
-    base(href='/')
-    title Final Four Volunteer
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css", rel="stylesheet")
-    link(href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css", rel="stylesheet")
-    link(rel='stylesheet', href='/css/app.css')
-  body
-    block body
+	meta(charset='utf8')
+	base(href='/')
+	title Final Four Volunteer
+	meta(name="viewport", content="width=device-width, initial-scale=1.0")
+	link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css", rel="stylesheet")
+	link(href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css", rel="stylesheet")
+	link(rel='stylesheet', href='/css/app.css')
+	script(src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+	script(src='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js')
+  
+	body
+		div.container-fluid
+			h2 Four Volunteers
+			p.lead Final Four Volunteer Resources	
+			block body
     
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
-    script(src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
-    script(src='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js')
-    script(src='js/ffvol.js')
-    script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
+		script(src='js/ffvol.js')
+		script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min.js')
