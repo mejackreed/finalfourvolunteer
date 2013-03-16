@@ -111,7 +111,7 @@ app.post('/login', passport.authenticate('local', {
 app.get('/api/schedule/:variable', api.schedule);
 app.get('/api/twitter', api.twitter)
 app.get('/api/alerts', api.alerts)
-app.put('/api/alerts', api.alertpost)
+app.put('/api/alertsend', api.alertpost)
 app.put('/api/signup', api.signuppost)
 
 // redirect all others to the index (HTML5 history)

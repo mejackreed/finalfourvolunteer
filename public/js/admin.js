@@ -9,7 +9,7 @@ $(function() {
 function sendAlert() {
 	console.log($('#alertText').val())
 	$.ajax({
-		url : "/api/alerts",
+		url : "/api/alertsend",
 		type : "PUT",
 		data : {
 			"alertText" : $('#alertText').val(),

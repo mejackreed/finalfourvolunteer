@@ -2,15 +2,17 @@
  * Serve JSON to our AngularJS client
  */
 
+//4048095070
+
 var request = require('request');
 var mongoose = require("mongoose");
 var Twit = require('twit');
 
 var T = new Twit({
-	consumer_key : 'GkTL9JIiep2LmVNBSf3mNA',
-	consumer_secret : 'yZ3a3GagMS3gIX1pXDqK0NdYFmeibSjs35FBMiGvYs',
-	access_token : '1272293040-1TR3m4yrDswHQxrejN6F5lXCvLKpDRto2ZwmvQl',
-	access_token_secret : 'STQb68TzcHFkoe0HPW2CKOqEuszUb5zrSIj2J6qfpQ'
+	consumer_key : 'BSs5VlwsHz4sDN45vzfiuQ',
+	consumer_secret : 'D36illj5Khhmgq7j8GSewEamLrpf5zZhBv33Ha0mPMg',
+	access_token : '1272293040-tOkdQZ3j3rXfm4Y7v2leHAmMHjuj1rutwGE4mMY',
+	access_token_secret : 'krBXYTg42vx0LJWGkppgggaEyeD1A3sGuzSVZcZFk'
 })
 
 var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
@@ -94,7 +96,12 @@ exports.alertpost = function(req, res) {
 		alertTime : req.body.alertTime
 	})
 	dataRecord.save(function(err) {
-
+		T.post('statuses/update', {
+			status : req.body.alertText
+		}, function(err, reply) {
+			//  ...
+			console.log(err)
+		})
 	})
 }
 
