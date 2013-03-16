@@ -92,6 +92,7 @@ app.get('/', routes.index);
 app.get('/shuttle', routes.shuttle);
 app.get('/signup', routes.signup);
 app.get('/login', routes.login);
+app.get('/admin', routes.admin);
 
 app.get('/flash', function(req, res) {
 	req.flash('info', 'Hi there!')

@@ -36,7 +36,7 @@ function postAlerts(data) {
 	var html = "";
 	_.each(data, function(value) {
 		//console.log(value)
-		html += "<div class='alert alert-error'><button type='button' class='close' data-dismiss='alert'>&times;</button><p>" + value.alertText + "</p><p>Posted " + moment(value.alertTime).format('L LT') + "</p></div>"
+		html += "<div class='alert alert-error'><button type='button' class='close' data-dismiss='alert'>&times;</button><p>" + value.alertText + "<strong> Posted " + moment(value.alertTime).format('L LT') + "</strong></p></div>"
 	})
 	$('#importantInfo').html(html);
 }
