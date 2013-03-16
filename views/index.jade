@@ -1,12 +1,20 @@
 extends layout
 
 block body
-	div.row-fluid
+	div.row
 		div.span6.well
 			h4 Resources
 				ul
-					li <a href='/shuttle'>Shuttle Times</a>
-		div.span4.well
+					li <a href='/shuttle'>Volunteer Shuttle Times</a>
+					li <a href='http://www.volunteerfinalfouratl.com/'>Official Volunteer Site</a>
+			div
+				h4 Official March Madness Apps
+				a(href='https://itunes.apple.com/us/app/id423246594?mt=8', target='_blank')
+					img(src='/images/app-store.png')
+				| &nbsp;
+				a(href='https://play.google.com/store/search?q=march+madness', target='_blank')
+					img(src='/images/googleplay.png')
+		div.span6.well
 			h4 Official Twitter Feed
 			ul#twitterFeed.media-list
   
