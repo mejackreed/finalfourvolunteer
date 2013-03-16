@@ -1,0 +1,39 @@
+extends layout
+
+block body
+  div.well.span6.offset4
+    form.form-horizontal(action='/api/signup', method='post')
+      .control-group
+        label.control-label(for='firstName') First Name
+        .controls
+          input#firstName(type='text', placeholder='')
+      .control-group
+        label.control-label(for='lastName') Last Name
+        .controls
+          input#lastName(type='text', placeholder='')
+      .control-group
+        label.control-label(for='inputEmail') Email
+        .controls
+          input#inputEmail(type='text', placeholder='user@example.com')
+      .control-group
+        label.control-label(for='inputPassword') Create a password
+        .controls
+          input#inputPassword(type='password', placeholder='')
+      .control-group
+        label.control-label(for='confirmPassword') Confirm your password
+        .controls
+          input#confirmPassword(type='password', placeholder='')
+      .control-group
+        label.control-label(for='twitter') Twitter Account
+        .controls
+          input#twitter(type='text', placeholder='@FinalFourVols')
+      .control-group
+        label.control-label(for='mobile') Mobile Phone Number
+        .controls
+          input#mobile(type='tel', placeholder='404-867-5309')
+      .control-group
+        .controls
+          a(href='#', onClick='testSubmit()').btn Sign Up
+          
+block scripts
+  script(src='/js/signup.js')

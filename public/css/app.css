@@ -1,0 +1,4 @@
+.well {
+	-webkit-box-shadow: 2px 2px 3px 4px rgba(255, 255, 255, .7);
+	box-shadow: 2px 2px 3px 4px rgba(255, 255, 255, .7);
+}

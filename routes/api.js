@@ -21,8 +21,6 @@ var mongoOptions = {
 };
 var tweets
 
-
-
 mongoose.connect(uristring, mongoOptions, function(err, res) {
 	// if (err) {
 	// console.log('ERROR connecting to: ' + uristring + '. ' + err);
@@ -30,6 +28,18 @@ mongoose.connect(uristring, mongoOptions, function(err, res) {
 	// console.log('Succeeded connected to: ' + uristring);
 	// }
 });
+
+var alertSchema = new mongoose.Schema({
+	alertText : {
+		type : String,
+	},
+	alertTime : {
+		type : Date,
+	},
+	alertStatus : {
+		type : Boolean,
+	}
+})
 
 var tripSchema = new mongoose.Schema({
 	pickupLocation : {
@@ -46,7 +56,61 @@ var tripSchema = new mongoose.Schema({
 	}
 })
 
+var userSchema = new mongoose.Schema({
+	first_name : {
+		type : String,
+	},
+	last_name : {
+		type : String,
+	},
+	email : {
+		type : String
+	},
+	twitter : {
+		type : String
+	},
+	password : {
+		type : String
+	}
+})
+
+var User = mongoose.model('Users', userSchema);
 var shuttleTrips = mongoose.model('ShuttleTrips', tripSchema);
+var alert = mongoose.model('Alerts', alertSchema);
+
+exports.alerts = function(req, res) {
+	alert.find({
+		alertStatus : true
+	}).exec(function(err, result) {
+		res.json(result)
+	})
+}
+
+exports.alertpost = function(req, res) {
+	console.log(req.body)
+	var dataRecord = new alert({
+		alertText : req.body.alertText,
+		alertStatus : req.body.alertStatus,
+		alertTime : req.body.alertTime
+	})
+	dataRecord.save(function(err) {
+
+	})
+}
+
+exports.signuppost = function(req, res) {
+	console.log(req)
+	var user = new User({
+		last_name : req.body.last_name,
+		first_name : req.body.first_name,
+		email : req.body.email,
+		twitter_username : req.body.twitter,
+		password : req.body.password
+	})
+	user.save(function(err) {
+
+	})
+}
 
 exports.schedule = function(req, res) {
 	var today = new Date()
@@ -63,10 +127,10 @@ exports.schedule = function(req, res) {
 
 exports.twitter = function(req, res) {
 	T.get('search/tweets', {
-	q : 'FinalFourVols'
-}, function(err, reply) {
-	//console.log(reply)
-	res.json(reply)
-	//  ...
-})
+		q : 'FinalFourVols'
+	}, function(err, reply) {
+		//console.log(reply)
+		res.json(reply)
+		//  ...
+	})
 }
