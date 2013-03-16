@@ -5,6 +5,7 @@ var flash = require('connect-flash');
 
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 
+
 var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
 var mongoOptions = {
 	db : {
@@ -96,7 +97,7 @@ app.get('/admin', routes.admin);
 
 app.get('/flash', function(req, res) {
 	req.flash('info', 'Hi there!')
-//	res.redirect('/');
+	//	res.redirect('/');
 });
 // Login
 

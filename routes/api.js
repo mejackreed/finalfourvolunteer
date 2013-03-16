@@ -1,12 +1,13 @@
-/*
- * Serve JSON to our AngularJS client
- */
 
 //4048095070
+
+ACCOUNT_SID = 'ACe933fd0423b4672220d2a1bd8f99dd1d';
+AUTH_TOKEN = '35966416884bca65cfc25f1a13c62e40';
 
 var request = require('request');
 var mongoose = require("mongoose");
 var Twit = require('twit');
+var client = require('twilio')('ACCOUNT_SID', 'AUTH_TOKEN');
 
 var T = new Twit({
 	consumer_key : 'BSs5VlwsHz4sDN45vzfiuQ',
@@ -96,13 +97,35 @@ exports.alertpost = function(req, res) {
 		alertTime : req.body.alertTime
 	})
 	dataRecord.save(function(err) {
-		T.post('statuses/update', {
-			status : req.body.alertText
-		}, function(err, reply) {
-			//  ...
-			console.log(err)
-		})
+
 	})
+	T.post('statuses/update', {
+		status : req.body.alertText
+	}, function(err, reply) {
+		//  ...
+		console.log('Twitter post fail: ' + err)
+	})
+
+	client.sendSms({
+		to : '+14043763550', // Any number Twilio can deliver to
+		from : '+16786819857', // A number you bought from Twilio and can use for outbound communication
+		body : 'word to your mother.' // body of the SMS message
+
+	}, function(err, responseData) {//this function is executed when a response is received from Twilio
+		console.log(err)
+		if (!err) {// "err" is an error received during the request, if any
+
+			// "responseData" is a JavaScript object containing data received from Twilio.
+			// A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
+			// http://www.twilio.com/docs/api/rest/sending-sms#example-1
+
+			console.log(responseData.from);
+			// outputs "+14506667788"
+			console.log(responseData.body);
+			// outputs "word to your mother."
+
+		}
+	});
 }
 
 exports.signuppost = function(req, res) {
