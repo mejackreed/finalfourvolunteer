@@ -35,6 +35,7 @@ app.get('/', routes.index);
 // JSON API
 
 app.get('/api/schedule/:variable', api.schedule);
+app.get('/api/twitter', api.twitter)
 
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
