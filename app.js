@@ -118,6 +118,8 @@ app.get('/api/twitter', api.twitter)
 app.get('/api/alerts/:id', api.alerts)
 app.put('/api/alerts/:id', api.alertput)
 app.put('/api/alertsend', api.alertsend)
+app.put('/api/twittersend', api.twittersend)
+
 // app.put('/api/signup', api.signuppost)
 
 //angularBridge.addResource('alerts', db.Alert)

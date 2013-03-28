@@ -66,11 +66,11 @@ exports.twittersend = function(req, res) {
 	}, function(err, reply) {
 		//  ...
 		if (err == null) {
-			status.push({
+			res.json({
 				"twitter" : true
 			})
 		} else {
-			status.push({
+			res.json({
 				"twitter" : false
 
 			})
@@ -92,12 +92,12 @@ exports.alertsend = function(req, res) {
 		console.log('alert saved')
 		console.log(err)
 		if (err == null) {
-			status.push({
+			res.json({
 				"mongo" : true
 			})
 			console.log('mongo success')
 		} else {
-			status.push({
+			res.json({
 				"mongo" : false
 			})
 		}

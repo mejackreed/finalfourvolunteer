@@ -1,8 +1,14 @@
 
 div.span6(ng-controller='alertCtrl', ng-cloak).well
   h4 Uncheck to remove alert from website
-  form
-    label.checkbox(ng-repeat="alert in alertResult.data", class="active-{{alert.alertStatus}}")
-      input(type="checkbox", ng-model="alert.alertStatus", ng-click = "update()") 
-      | {{alert.alertText}}
+  table.table
+    tr
+      th Show?
+      th Message
+      th Time Posted
+    tr(ng-repeat="alert in alertResult.data | orderBy:'alertTime':true", class="active-{{alert.alertStatus}}")
+      td
+        input(type="checkbox", ng-model="alert.alertStatus", ng-click = "update()") 
+      td {{alert.alertText}}
+      td {{alert.alertTime | date:'short'}}
   button.btn(ng-click="archive()") Remove Unchecked Alerts

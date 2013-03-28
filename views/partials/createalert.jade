@@ -1,9 +1,20 @@
 div.span6.well(ng-controller='alertCreateCtrl', ng-cloak)
   h3 Add new system alert
-  form(name='alertForm')
-    textarea#alertText(placeholder='Type message to be sent to volunteers', rows='3', ng-model='message',  ng-MinLength= 1 , ng-MaxLength= 140, name='message')
-    div(class="error", ng-show="!alertForm.$valid") Alert must be between 1 and 140 characters
+  div.row-fluid
+    form(name='alertForm')
+      textarea#alertText(placeholder='Type message to be sent to volunteers', rows='3', ng-model='message',  ng-MinLength= 1 , ng-MaxLength= 140, name='message')
+      div(class="error", ng-show="!alertForm.$valid") Alert must be between 1 and 140 characters
+      div
+        small ({{message.length}} of 140)
     div
-      small ({{message.length}} of 140)
-
-  button(href="#", ng-click='sendAlert()').btn Send Alert
+      form
+        label.checkbox
+          input(type="checkbox", ng-model="postTwitter") 
+          | Send to Twitter? <i class="{{twitterStatus}}"></i>
+        label.checkbox
+          input(type="checkbox", ng-model="postWebsite") 
+          | Send to website? <i class="{{websiteStatus}}"></i>
+        label.checkbox
+          input(type="checkbox", ng-model="postSMS") 
+          | Send to SMS? <i class="{{smsStatus}}"></i>
+  button(href="#", ng-click='sendAlert()').btn {{button}}

@@ -52,13 +52,54 @@ function twitterCtrl($scope, $resource) {
 
 function alertCreateCtrl($scope, $resource, $http) {
 	$scope.message = '';
+	$scope.button = 'Send Alert';
+	$scope.postTwitter = true;
+	$scope.postWebsite = true;
+	$scope.postSMS = true;
+	$scope.reset = function() {
+		$scope.message = "";
+		$scope.postTwitter = true;
+		$scope.postWebsite = true;
+		$scope.postSMS = true;
+		$scope.websiteStatus = "";
+		$scope.smsStatus = "";
+		$scope.twitterStatus = "";
+
+	}
 	$scope.sendAlert = function() {
-		console.log($scope.message.length)
 		if ($scope.message.length > 0 && $scope.message.length < 140) {
-			console.log('good')
-			$http.put('/api/alertsend', {
-				data : $scope.message
-			})
+			if ($scope.postWebsite) {
+				$scope.websiteStatus = "icon-spinner icon-spin"
+				$http.put('/api/alertsend', {
+					data : $scope.message
+				}).success(function(data) {
+					$scope.websiteStatus = "icon-check"
+					//console.log(data)
+				})
+			}
+			if ($scope.postTwitter) {
+				$scope.twitterStatus = "icon-spinner icon-spin"
+				$http.put('/api/twittersend', {
+					data : $scope.message
+				}).success(function(data) {
+					$scope.twitterStatus = "icon-check"
+
+				})
+			}
+			if ($scope.postSMS) {
+				$scope.smsStatus = "icon-spinner icon-spin"
+				$http.put('/api/smssend', {
+					data : $scope.message
+				}).success(function(data) {
+					$scope.smsStatus = "icon-check"
+				}).error(function(data) {
+					console.log(data)
+					$scope.smsStatus = "icon-remove"
+
+				})
+			}
+
+			$scope.message = "";
 		}
 	}
 }
