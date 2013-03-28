@@ -1,0 +1,7 @@
+
+div.span6(ng-controller='alertCtrl', ng-cloak)
+  .alert(ng-repeat='alert in alertResult.data | limitTo:8')
+    button.close(type='button', data-dismiss='alert') &times;
+    strong {{alert.alertTime | date:'medium'}}
+    | &nbsp; &nbsp; {{alert.alertText}}
+   

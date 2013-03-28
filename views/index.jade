@@ -2,6 +2,9 @@ extends layout
 
 block body
 	div.row-fluid
+		include partials/alerts
+	
+	div.row-fluid
 		div.span6.well
 			div
 				h3 Resources
@@ -18,9 +21,7 @@ block body
 				| &nbsp;
 				a(href='https://play.google.com/store/search?q=march+madness', target='_blank')
 					img(src='/images/googleplay.png')
-		div.span6.well
-			h3 Official Volunteer Twitter Feed
-			ul#twitterFeed.media-list
+		include partials/twitter
 
 block scripts
 	script(src='/js/ffvol.js')

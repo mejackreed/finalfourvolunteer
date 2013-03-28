@@ -2,11 +2,14 @@ extends layout
 
 block body
   div.container-fluid
-    h3 Add new system alert
-    div
-      label.control-label(for='alertText') Message to be sent
-      textarea#alertText(placeholder='Type message to be sent to volunteers', rows='3')
-    a(href="#", onClick='sendAlert()').btn Send
+    div.row-fluid
+      include partials/createalert
+        
+      include partials/alertupdate
+
+    div.row-fluid
+      include partials/twitter
+      
     
 block scripts
   script(src='/js/admin.js')

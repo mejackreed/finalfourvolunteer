@@ -1,0 +1,15 @@
+div.span6(ng-controller='shuttleCtrl').well
+  h4 Volunteer Shuttle Bus
+  p Next bus {{shuttleResult.data[0].pickupTime | fromNow}}
+  table.table.table-hover
+    tr
+      th Pickup Time
+      th Pickup Location
+      th Dropoff Time
+      th Dropoff Location
+    tr(ng-repeat='shuttle in shuttleResult.data | orderBy:pickupTime')
+      td {{shuttle.pickupTime | date:'short'}}
+      td(ng-bind-html-unsafe="shuttle.pickupLocation | checkLoc")
+      td {{shuttle.dropoffTime | date:'short'}}
+      td(ng-bind-html-unsafe="shuttle.dropoffLocation | checkLoc")
+      

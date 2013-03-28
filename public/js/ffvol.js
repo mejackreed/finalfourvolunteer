@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	getAlerts()
-	getTweets()
+	//getAlerts()
+	//getTweets()
 });
 
 function getTweets() {

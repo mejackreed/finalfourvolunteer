@@ -1,0 +1,9 @@
+div.span6.well(ng-controller='alertCreateCtrl', ng-cloak)
+  h3 Add new system alert
+  form(name='alertForm')
+    textarea#alertText(placeholder='Type message to be sent to volunteers', rows='3', ng-model='message',  ng-MinLength= 1 , ng-MaxLength= 140, name='message')
+    div(class="error", ng-show="!alertForm.$valid") Alert must be between 1 and 140 characters
+    div
+      small ({{message.length}} of 140)
+
+  button(href="#", ng-click='sendAlert()').btn Send Alert

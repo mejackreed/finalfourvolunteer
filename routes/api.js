@@ -1,4 +1,5 @@
 //4048095070
+var db = require('../db.js');
 
 var ACCOUNT_SID = process.env.TWILIO_SID;
 var AUTH_TOKEN = process.env.TWILIO_TOKEN;
@@ -10,6 +11,8 @@ var Twit = require('twit');
 var client = require('twilio')('ACCOUNT_SID', 'AUTH_TOKEN');
 var util = require('util')
 
+//var db = require('./db.js');
+
 var T = new Twit({
 	consumer_key : process.env.TWITTER_CONSUMER_KEY,
 	consumer_secret : process.env.TWITTER_CONSUMER_SECRET,
@@ -17,97 +20,93 @@ var T = new Twit({
 	access_token_secret : process.env.TWITTER_ACCESS_TOKEN_SECRET
 })
 
-var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
-var mongoOptions = {
-	db : {
-		safe : true
-	}
-};
+// var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
+// var mongoOptions = {
+// db : {
+// safe : true
+// }
+// };
 var tweets
 
-mongoose.connect(uristring, mongoOptions, function(err, res) {
-	// if (err) {
-	// console.log('ERROR connecting to: ' + uristring + '. ' + err);
-	// } else {
-	// console.log('Succeeded connected to: ' + uristring);
-	// }
-});
-
-var alertSchema = new mongoose.Schema({
-	alertText : {
-		type : String,
-	},
-	alertTime : {
-		type : Date,
-	},
-	alertStatus : {
-		type : Boolean,
-	}
-})
-
-var tripSchema = new mongoose.Schema({
-	pickupLocation : {
-		type : String,
-	},
-	dropoffLocation : {
-		type : String,
-	},
-	pickupTime : {
-		type : Date
-	},
-	dropoffTime : {
-		type : Date
-	}
-})
-
-var userSchema = new mongoose.Schema({
-	first_name : {
-		type : String,
-	},
-	last_name : {
-		type : String,
-	},
-	email : {
-		type : String
-	},
-	twitter : {
-		type : String
-	},
-	password : {
-		type : String
-	}
-})
-
-var User = mongoose.model('Users', userSchema);
-var shuttleTrips = mongoose.model('ShuttleTrips', tripSchema);
-var alert = mongoose.model('Alerts', alertSchema);
+// mongoose.connect(uristring, mongoOptions, function(err, res) {
+// // if (err) {
+// // console.log('ERROR connecting to: ' + uristring + '. ' + err);
+// // } else {
+// // console.log('Succeeded connected to: ' + uristring);
+// // }
+// });
 
 exports.alerts = function(req, res) {
-	alert.find({
+	db.Alert.find({
 		alertStatus : true
 	}).exec(function(err, result) {
-		res.json(result)
+		res.type('application/json');
+		res.jsonp({
+			data : result
+		})
+	})
+}
+exports.alertput = function(req, res) {
+	db.Alert.update({
+		_id : req.params.id
+	}, {
+		$set : {
+			alertStatus : false
+		}
+	}, {
+		upsert : true
+	}, function(err) {
+		console.log(err)
+	})
+	res.json(req.params.id)
+}
+exports.twittersend = function(req, res) {
+	T.post('statuses/update', {
+		status : req.body.data
+	}, function(err, reply) {
+		//  ...
+		if (err == null) {
+			status.push({
+				"twitter" : true
+			})
+		} else {
+			status.push({
+				"twitter" : false
+
+			})
+		}
+
 	})
 }
 
-exports.alertpost = function(req, res) {
+exports.alertsend = function(req, res) {
 	console.log(req.body)
-	var dataRecord = new alert({
-		alertText : req.body.alertText,
-		alertStatus : req.body.alertStatus,
-		alertTime : req.body.alertTime
+	var status = []
+	// console.log(req.body)
+	var dataRecord = new db.Alert({
+		alertText : req.body.data,
+		alertStatus : true,
+		alertTime : Date()
 	})
 	dataRecord.save(function(err) {
-
+		console.log('alert saved')
+		console.log(err)
+		if (err == null) {
+			status.push({
+				"mongo" : true
+			})
+			console.log('mongo success')
+		} else {
+			status.push({
+				"mongo" : false
+			})
+		}
 	})
-	T.post('statuses/update', {
-		status : req.body.alertText
-	}, function(err, reply) {
-		//  ...
-		console.log('Twitter post fail: ' + err)
-	})
-	sendSMSMessage(req.body.alertText)
-	//sss();
+	// sendSMSMessage(req.body.alertText)
+	// //sss();
+	while (status.length == 2) {
+		res.jsonp(status)
+	}
 }
 function sss() {
 	client.sendSms({
@@ -165,28 +164,31 @@ function sendSMSMessage(message) {
 
 exports.signuppost = function(req, res) {
 	console.log(req)
-	var user = new User({
+	var user = new db.User({
 		last_name : req.body.last_name,
 		first_name : req.body.first_name,
 		email : req.body.email,
 		twitter_username : req.body.twitter,
 		password : req.body.password
 	})
-	user.save(function(err) {
+	db.user.save(function(err) {
 
 	})
 }
 
-exports.schedule = function(req, res) {
+exports.shuttle = function(req, res) {
 	var today = new Date()
 	var param = req.params.variable;
 	//res.json(param)
-	shuttleTrips.find({
+	db.ShuttleTrips.find({
 		pickupTime : {
 			'$gte' : new Date()
 		}
 	}).exec(function(err, result) {
-		res.json(result)
+		res.type('application/json');
+		res.jsonp({
+			data : result
+		})
 	})
 }
 
@@ -195,7 +197,8 @@ exports.twitter = function(req, res) {
 		q : 'FinalFourVols'
 	}, function(err, reply) {
 		//console.log(reply)
-		res.json(reply)
+		res.type('application/json');
+		res.jsonp(reply)
 		//  ...
 	})
 }

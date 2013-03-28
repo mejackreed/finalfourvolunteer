@@ -1,14 +1,16 @@
 extends layout
 
 block body
+
   div.row-fluid
-    div.span8.well
-      h4 Volunteer Shuttle Bus
-      div#nextShuttle
-      table#pickupTimes.table.table-hover
-    div.span4.well
-      h4 Official Twitter Feed
-      ul#twitterFeed.media-list
+    include partials/alerts
+
+  div.row-fluid
+    include partials/shuttleschedule
+
+    
+    include partials/twitter
+  
       
   script(src='/js/shuttle.js')
   script(src='/js/ffvol.js')

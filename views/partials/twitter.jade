@@ -1,0 +1,13 @@
+div.span6(ng-controller='twitterCtrl').well
+  h3 Official Volunteer Twitter Feed
+  ul(ng-cloak)
+    li(ng-repeat='tweet in twitterResult.statuses | limitTo:8').media
+      img(ng-src="{{tweet.user.profile_image_url}}").media-object.pull-left
+      div.media-body
+        div.media-heading 
+          a(href='http://www.twitter.com/{{tweet.user.screen_name}}')
+            span.full-name{{tweet.user.name}}
+          a(href='http://www.twitter.com/{{tweet.user.screen_name}}')
+            span.muted 
+              user-name @{{tweet.user.screen_name}}
+        .media(ng-bind-html = 'tweet.text | linky')

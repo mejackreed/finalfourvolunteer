@@ -4,34 +4,34 @@
 var flash = require('connect-flash');
 
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var db = require('./db.js');
 
-
-var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
-var mongoOptions = {
-	db : {
-		safe : true
-	}
-};
-
-mongoose.connect(uristring, mongoOptions, function(err, res) {
-	// if (err) {
-	// console.log('ERROR connecting to: ' + uristring + '. ' + err);
-	// } else {
-	// console.log('Succeeded connected to: ' + uristring);
-	// }
-});
-
-var UserSchema = new mongoose.Schema({
-uid : String,
-last_name : String,
-first_name : String,
-twitter_username : String,
-email : String,
-password : String,
-created : {type: Date, default: Date.now}
-});
-
-var User = mongoose.model('User', UserSchema);
+// var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
+// var mongoOptions = {
+// db : {
+// safe : true
+// }
+// };
+//
+// mongoose.connect(uristring, mongoOptions, function(err, res) {
+// // if (err) {
+// // console.log('ERROR connecting to: ' + uristring + '. ' + err);
+// // } else {
+// // console.log('Succeeded connected to: ' + uristring);
+// // }
+// });
+//
+// var UserSchema = new mongoose.Schema({
+// uid : String,
+// last_name : String,
+// first_name : String,
+// twitter_username : String,
+// email : String,
+// password : String,
+// created : {type: Date, default: Date.now}
+// });
+//
+// var User = mongoose.model('User', UserSchema);
 
 var app = module.exports = express();
 
@@ -87,6 +87,10 @@ passport.use(new LocalStrategy(function(username, password, done) {
 	});
 }));
 
+var angularBridge = new (require('angular-bridge'))(app, {
+	urlPrefix : '/api/'
+});
+
 // Routes
 
 app.get('/', routes.index);
@@ -100,20 +104,25 @@ app.get('/flash', function(req, res) {
 	//	res.redirect('/');
 });
 // Login
-
-app.post('/login', passport.authenticate('local', {
-	successRedirect : '/',
-	failureRedirect : '/login',
-	failureFlash : true
-}));
+//
+// app.post('/login', passport.authenticate('local', {
+// successRedirect : '/',
+// failureRedirect : '/login',
+// failureFlash : true
+// }));
 
 // JSON API
-
-app.get('/api/schedule/:variable', api.schedule);
+//
+app.get('/api/shuttles', api.shuttle);
 app.get('/api/twitter', api.twitter)
-app.get('/api/alerts', api.alerts)
-app.put('/api/alertsend', api.alertpost)
-app.put('/api/signup', api.signuppost)
+app.get('/api/alerts/:id', api.alerts)
+app.put('/api/alerts/:id', api.alertput)
+app.put('/api/alertsend', api.alertsend)
+// app.put('/api/signup', api.signuppost)
+
+//angularBridge.addResource('alerts', db.Alert)
+//angularBridge.addResource('shuttles', db.Alert)
+//angularBridge.addResource('users', db.Alert)
 
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);

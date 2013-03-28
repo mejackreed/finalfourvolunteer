@@ -1,3 +1,17 @@
 .well {
 	border: 1px solid #375dbc;
 }
+.full-name {
+	font-weight: bold;
+	font-size: 18px;
+}
+a:hover, user-name {
+	text-decoration: none;
+}
+.active-true {
+
+}
+.active-false {
+	color: #222222;
+	text-decoration: line-through;
+}

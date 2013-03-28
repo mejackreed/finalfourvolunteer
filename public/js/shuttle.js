@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	getTimes()
+	//getTimes()
 });
 //(678) 681-9857
 
