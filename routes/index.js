@@ -5,7 +5,8 @@ var userName = ""
 
 exports.index = function(req, res) {
 	res.render('index', {
-		userName : req.user
+		user : req.user
+		
 	});
 };
 
@@ -23,6 +24,6 @@ exports.login = function(req, res) {
 
 exports.admin = function(req, res) {
 	res.render('admin', {
-		userName : req.user
+		user : req.user
 	});
 }

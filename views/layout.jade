@@ -36,9 +36,10 @@ html(ng-app='app')
 								li
 									a(href="/admin") Admin
 						div.navbar-text.pull-right 
-							if (typeof(userName) == 'undefined')
+							if (typeof(user) == 'undefined')
 								a(href='/login') Login
 							else
+								| Hello #{user.username} &nbsp; | &nbsp;
 								a(href='/logout') Logout
 						
 									
