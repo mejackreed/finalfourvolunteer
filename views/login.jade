@@ -1,14 +1,17 @@
 extends layout
 
 block body
-  div.well.span4
+  div.well.span6
     h4 Login
-      form(action='/login',method='post')
-        div
-          label Username:
-            input(type='text',name='username')
-        div
-          label Password:
-            input(type='password',name='password')
-        div
+    form(action='/login',method='post').form-horizontal
+      .control-group
+        label.control-label(for="username") Username
+        .controls
+          input#username(type='text',name='username')
+      .control-group
+        label.control-label(for="password") Password
+        .controls
+          input#password(type='password',name='password')
+      .control-group
+        .controls
           input(type='submit',value='Log In', class='btn')

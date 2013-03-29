@@ -1,0 +1,17 @@
+extends layout
+
+block body
+  div.well.span6
+    h4 Register
+    form(action='/register',method='post').form-horizontal
+      .control-group
+        label.control-label(for="username") Username
+        .controls
+          input#username(type='text',name='username')
+      .control-group
+        label.control-label(for="password") Password
+        .controls
+          input#password(type='password',name='password')
+      .control-group
+        .controls
+          input(type='submit',value='Log In', class='btn')

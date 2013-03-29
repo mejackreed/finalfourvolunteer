@@ -32,9 +32,15 @@ html(ng-app='app')
 								li
 									a(href="/shuttle") Shuttle
 								li
-									a(href="/signup") Signup
+									a(href="/login") Login
 								li
 									a(href="/admin") Admin
+						div.navbar-text.pull-right 
+							if (typeof(userName) == 'undefined')
+								a(href='/login') Login
+							else
+								a(href='/logout') Logout
+						
 									
 		div.container-fluid
 			block body

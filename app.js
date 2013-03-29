@@ -4,34 +4,10 @@
 var flash = require('connect-flash');
 
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
-var db = require('./db.js');
+var flash = require('connect-flash');
+var db = ('./db.js')
+var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mongoose');
 
-// var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
-// var mongoOptions = {
-// db : {
-// safe : true
-// }
-// };
-//
-// mongoose.connect(uristring, mongoOptions, function(err, res) {
-// // if (err) {
-// // console.log('ERROR connecting to: ' + uristring + '. ' + err);
-// // } else {
-// // console.log('Succeeded connected to: ' + uristring);
-// // }
-// });
-//
-// var UserSchema = new mongoose.Schema({
-// uid : String,
-// last_name : String,
-// first_name : String,
-// twitter_username : String,
-// email : String,
-// password : String,
-// created : {type: Date, default: Date.now}
-// });
-//
-// var User = mongoose.model('User', UserSchema);
 
 var app = module.exports = express();
 
@@ -42,14 +18,14 @@ app.configure(function() {
 	app.set('view engine', 'jade');
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-	app.use(express.cookieParser('keyboard cat'));
-	app.use(express.session({
-		cookie : {
-			maxAge : 60000
-		}
-	}));
+
 	app.use(express.static(__dirname + '/public'));
 	app.use(flash());
+	app.use(express.cookieParser());
+	app.use(express.session({
+		secret : 'keyboard cat'
+	}));
+	//npapp.use(mongooseAuth.middleware())
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.use(app.router);
@@ -66,68 +42,62 @@ app.configure('production', function() {
 	app.use(express.errorHandler());
 });
 
-passport.use(new LocalStrategy(function(username, password, done) {
-	User.findOne({
-		username : username
-	}, function(err, user) {
-		if (err) {
-			return done(err);
-		}
-		if (!user) {
-			return done(null, false, {
-				message : 'Incorrect username.'
-			});
-		}
-		if (!user.validPassword(password)) {
-			return done(null, false, {
-				message : 'Incorrect password.'
-			});
-		}
-		return done(null, user);
-	});
-}));
+// requires the model with Passport-Local Mongoose plugged in
+var Account = require('./models/account');
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(Account.authenticate()));
 
-var angularBridge = new (require('angular-bridge'))(app, {
-	urlPrefix : '/api/'
-});
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
-// Routes
 
 app.get('/', routes.index);
 app.get('/shuttle', routes.shuttle);
-app.get('/signup', routes.signup);
-app.get('/login', routes.login);
-app.get('/admin', routes.admin);
+app.get('/register', routes.register);
+app.get('/admin', ensureAuthenticated, routes.admin);
 
-app.get('/flash', function(req, res) {
-	req.flash('info', 'Hi there!')
-	//	res.redirect('/');
+app.get('/login', function(req, res) {
+	res.render('login', {
+		userName : req.user
+	});
 });
-// Login
-//
-// app.post('/login', passport.authenticate('local', {
-// successRedirect : '/',
-// failureRedirect : '/login',
-// failureFlash : true
-// }));
+
+app.post('/login', passport.authenticate('local'), function(req, res) {
+	res.redirect('/');
+});
+
+app.get('/logout', function(req, res) {
+	req.logout();
+	res.redirect('/');
+});
+
+app.post('/register', function(req, res) {
+	Account.register(new Account({
+		username : req.body.username
+	}), req.body.password, function(err, account) {
+		if (err) {
+			return res.render('register', {
+				account : account
+			});
+		}
+
+		res.redirect('/');
+	});
+});
 
 // JSON API
 //
 app.get('/api/shuttles', api.shuttle);
 app.get('/api/twitter', api.twitter)
 app.get('/api/alerts/:id', api.alerts)
-app.put('/api/alerts/:id', api.alertput)
-app.put('/api/alertsend', api.alertsend)
-app.put('/api/twittersend', api.twittersend)
+app.put('/api/alerts/:id', apiAuth, api.alertput)
+app.put('/api/alertsend', apiAuth, api.alertsend)
+app.put('/api/twittersend', apiAuth, api.twittersend)
 
-// app.put('/api/signup', api.signuppost)
 
-//angularBridge.addResource('alerts', db.Alert)
-//angularBridge.addResource('shuttles', db.Alert)
-//angularBridge.addResource('users', db.Alert)
-
-// redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
+
 
 // Start server
 var port = process.env.PORT || 3000;
@@ -135,3 +105,18 @@ var port = process.env.PORT || 3000;
 app.listen(port, function() {
 	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
+
+function apiAuth(req, res, next) {
+	console.log(req._passport.session.user)
+	if (req._passport.session.user != undefined) {
+		return next();
+	}
+	res.redirect('/login')
+}
+
+function ensureAuthenticated(req, res, next) {
+	if (req.isAuthenticated()) {
+		return next();
+	}
+	res.redirect('/login')
+}
