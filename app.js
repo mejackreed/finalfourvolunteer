@@ -1,10 +1,10 @@
 /**
  * Module dependencies.
  */
-var flash = require('connect-flash');
+//var flash = require('connect-flash');
 
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
-var flash = require('connect-flash');
+//var flash = require('connect-flash');
 var db = ('./db.js')
 var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mongoose');
 
@@ -19,7 +19,7 @@ app.configure(function() {
 	app.use(express.methodOverride());
 
 	app.use(express.static(__dirname + '/public'));
-	app.use(flash());
+	//app.use(flash());
 	app.use(express.cookieParser());
 	app.use(express.session({
 		secret : 'keyboard cat'
