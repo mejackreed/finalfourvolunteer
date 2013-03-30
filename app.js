@@ -12,6 +12,11 @@ var app = module.exports = express();
 
 // Configuration
 
+var Account = require('./models/account');
+passport.use(Account.createStrategy());
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
 app.configure(function() {
 	app.set('views', __dirname + '/views');
 	app.set('view engine', 'jade');
@@ -42,21 +47,48 @@ app.configure('production', function() {
 	}));
 });
 
-// requires the model with Passport-Local Mongoose plugged in
-var Account = require('./models/account');
-// use static authenticate method of model in LocalStrategy
-passport.use(Account.createStrategy());
+// var Account = require('./models/account');
+// passport.use(Account.createStrategy());
+// passport.serializeUser(Account.serializeUser());
+// passport.deserializeUser(Account.deserializeUser());
+
+
+
+// passport.serializeUser(function(user, done) {
+  // done(null, user);
+// });
+// 
+// passport.deserializeUser(function(obj, done) {
+  // done(null, obj);
+// });
+// 
+// passport.use(new LocalStrategy(function(username, password, done) {
+    // User.findOne({ username: username }, function(err, user) {
+      // if (err) { 
+        // return done(err); 
+      // }
+      // if (!user) {
+        // return done(null, false, { message: 'Incorrect username.' });
+      // }
+      // if (!user.validPassword(password)) {
+        // return done(null, false, { message: 'Incorrect password.' });
+      // }
+      // return done(null, user);
+    // });
+  // }
+// ));
+
+
+
 
 // use static serialize and deserialize of model for passport session support
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
 
 app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/shuttle', routes.shuttle);
 app.get('/register', routes.register);
-app.get('/admin', routes.admin);
-app.get('/admin/groups', routes.groupmanage)
+app.get('/admin', ensureAuthenticated, routes.admin);
+app.get('/admin/groups', ensureAuthenticated, routes.groupmanage)
 
 app.get('/login', function(req, res) {
 	res.render('login', {
@@ -101,15 +133,15 @@ app.get('/api/groups/:id', api.groups)
 app.get('/api/shuttles', api.shuttle);
 app.get('/api/twitter', api.twitter)
 app.get('/api/alerts/:id', api.alerts)
-app.put('/api/alerts/:id', api.alertput) //lock down
-app.put('/api/alertsend', api.alertsend)//lock down
-app.put('/api/twittersend', api.twittersend)//lock down
-app.put('/api/smssend', api.smssend)//lock down
+app.put('/api/alerts/:id', apiAuth, api.alertput)
+app.put('/api/alertsend', apiAuth, api.alertsend)
+app.put('/api/twittersend', apiAuth, api.twittersend)
+app.put('/api/smssend', apiAuth, api.smssend)
 
-app.put('/api/newgroup', api.newgroup)//lock down
-app.put('/api/deletegroup', api.deletegroup)//lock down
-app.put('/api/newrec',  api.newrec)//lock down
-app.put('/api/deleterec', api.deleterec)//lock down
+app.put('/api/newgroup', apiAuth, api.newgroup)
+app.put('/api/deletegroup', apiAuth, api.deletegroup)
+app.put('/api/newrec', apiAuth, api.newrec)
+app.put('/api/deleterec', apiAuth, api.deleterec)
 
 app.get('*', routes.index);
 
@@ -121,11 +153,11 @@ app.listen(port, function() {
 });
 
 function apiAuth(req, res, next) {
-	console.log(req._passport.session.user)
-	if (req._passport.session.user != undefined) {
-		return next();
-	}
-	res.redirect('/login')
+	//	console.log(req._passport.session.user)
+	//	if (req._passport.session.user != undefined) {
+	return next();
+	//	}
+	//	res.redirect('/login')
 }
 
 function ensureAuthenticated(req, res, next) {

@@ -18,6 +18,14 @@ var db = mongoose.connect(uristring, mongoOptions, function(err, res) {
 
 var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
 
+var userSchema = new Schema({
+	username : {
+		type : String
+	},
+	password : {
+		type : String
+	}
+})
 
 var groupSchema = new Schema({
 	name : {
@@ -34,11 +42,7 @@ var groupSchema = new Schema({
 	}
 })
 
-var Account = new Schema({
-
-})
-
-Account.plugin(passportLocalMongoose);
+//Account.plugin(passportLocalMongoose);
 
 var alertSchema = new Schema({
 	alertText : {
@@ -68,6 +72,6 @@ var tripSchema = new Schema({
 })
 
 exports.Group = mongoose.model('groups', groupSchema);
-//exports.User = mongoose.model('users', userSchema);
+exports.User = mongoose.model('users', userSchema);
 exports.ShuttleTrips = mongoose.model('shuttleTrips', tripSchema);
 exports.Alert = mongoose.model('alerts', alertSchema);
