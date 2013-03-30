@@ -21,9 +21,7 @@ app.configure(function() {
 	app.use(express.static(__dirname + '/public'));
 	app.use(express.cookieParser(process.env.SECRET));
 	app.use(express.session({
-		cookie : {
-			maxAge : 60000
-		}
+		secret : 'cat'
 	}));
 	app.use(passport.initialize());
 	app.use(passport.session());
