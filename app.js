@@ -22,7 +22,10 @@ app.configure(function() {
 	app.use(flash());
 	app.use(express.cookieParser());
 	app.use(express.session({
-		secret : process.env.SECRET
+		secret : process.env.SECRET,
+		cookie : {
+			maxAge : 60000
+		}
 	}));
 	//app.use(mongooseAuth.middleware())
 	app.use(passport.initialize());
