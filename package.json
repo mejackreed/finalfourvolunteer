@@ -22,6 +22,7 @@
     "twilio": "~1.1.0",
     "twit": "~1.1.6",
     "underscore": "~1.4.4",
-    "util": "~0.4.9"
+    "util": "~0.4.9",
+    "connect-ensure-login": "~0.1.0"
   }
 }

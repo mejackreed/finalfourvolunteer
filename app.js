@@ -6,6 +6,7 @@
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 var db = ('./db.js')
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mongoose');
 var app = module.exports = express();
 
@@ -101,8 +102,8 @@ app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/shuttle', routes.shuttle);
 app.get('/register', routes.register);
-app.get('/admin', ensureAuthenticated, routes.admin);
-app.get('/admin/groups', ensureAuthenticated, routes.groupmanage)
+app.get('/admin', ensureLoggedIn('/login'), routes.admin);
+app.get('/admin/groups', ensureLoggedIn('/login'), routes.groupmanage)
 
 app.get('/login', function(req, res) {
 	res.render('login', {
