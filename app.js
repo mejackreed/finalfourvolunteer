@@ -45,7 +45,9 @@ app.configure(function() {
 		cookie : {
 			maxAge : 60000
 		},
-		secret : process.env.SECRET
+		secret : process.env.SECRET,
+		maxAge : new Date(Date.now() + 3600000),
+
 	}));
 	app.use(flash());
 	app.use(passport.initialize());
