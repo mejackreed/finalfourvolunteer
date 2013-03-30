@@ -38,12 +38,15 @@ app.configure(function() {
 	app.set('view engine', 'jade');
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
-
 	app.use(express.static(__dirname + '/public'));
-	app.use(express.cookieParser(process.env.SECRET));
+	app.use(express.cookieParser());
 	app.use(express.session({
-		secret : 'cat'
+		cookie : {
+			maxAge : 60000
+		},
+		secret : process.env.SECRET
 	}));
+	app.use(flash());
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.use(app.router);
@@ -109,8 +112,8 @@ app.get('/login', function(req, res) {
 
 app.post('/login', passport.authenticate('local', {
 	successRedirect : '/admin',
-	failureRedirect : '/',
-	failureFlash : true
+	failureRedirect : '/'//,
+	//failureFlash : true
 }));
 
 app.get('/logout', function(req, res) {

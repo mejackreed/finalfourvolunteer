@@ -4,24 +4,18 @@
 
 exports.index = function(req, res) {
 	console.log(req.user)
-	res.render('index', {
-		user : req.user
-	});
+	res.render('index');
 };
 
 exports.about = function(req, res) {
 	console.log(req.user)
-	res.render('about', {
-		user : req.user
-	});
+	res.render('about');
 };
 
 exports.shuttle = function(req, res) {
 	console.log(req.user)
 
-	res.render('shuttle', {
-		user : req.user
-	});
+	res.render('shuttle');
 }
 
 exports.register = function(req, res) {
@@ -31,19 +25,13 @@ exports.register = function(req, res) {
 }
 
 exports.login = function(req, res) {
-	res.render('login', {
-		user : req.user
-	});
+	res.render('login');
 }
 
 exports.admin = function(req, res) {
-	res.render('admin', {
-		user : req.user
-	});
+	res.render('admin');
 }
 
 exports.groupmanage = function(req, res) {
-	res.render('groupmanage', {
-		user : req.user
-	})
+	res.render('groupmanage')
 }
