@@ -4,15 +4,13 @@ var _ = require("underscore");
 
 var ACCOUNT_SID = process.env.TWILIO_SID;
 var AUTH_TOKEN = process.env.TWILIO_TOKEN;
-var twilio_from_number = process.env.TWILIO_FROM;
+var twilio_from_numbers = [process.env.TWILIO_FROM_1, process.env.TWILIO_FROM_2, process.env.TWILIO_FROM_3, process.env.TWILIO_FROM_4, process.env.TWILIO_FROM_5];
 
 var request = require('request');
 var mongoose = require("mongoose");
 var Twit = require('twit');
 var client = require('twilio')('ACCOUNT_SID', 'AUTH_TOKEN');
 var util = require('util')
-
-//var db = require('./db.js');
 
 var T = new Twit({
 	consumer_key : process.env.TWITTER_CONSUMER_KEY,
@@ -21,21 +19,8 @@ var T = new Twit({
 	access_token_secret : process.env.TWITTER_ACCESS_TOKEN_SECRET
 })
 
-// var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
-// var mongoOptions = {
-// db : {
-// safe : true
-// }
-// };
 var tweets
 
-// mongoose.connect(uristring, mongoOptions, function(err, res) {
-// // if (err) {
-// // console.log('ERROR connecting to: ' + uristring + '. ' + err);
-// // } else {
-// // console.log('Succeeded connected to: ' + uristring);
-// // }
-// });
 exports.deleterec = function(req, res) {
 	//	console.log(req.body.data)
 	db.Group.update({
@@ -216,8 +201,13 @@ exports.smssend = function(req, res) {
 	var recipients = req.body.data.recipients
 	console.log(message)
 	console.log(recipients)
+	var i = 1;
 	_.each(recipients, function(rec) {
-		sendSMSMessage(message, rec)
+		sendSMSMessage(message, rec, i)
+		i++;
+		if (i == 6) {
+			i = 1
+		}
 	})
 	res.jsonp({
 		data : 'success'
@@ -246,12 +236,12 @@ function sss() {
 	});
 }
 
-function sendSMSMessage(message, recipient) {
+function sendSMSMessage(message, recipient, i) {
 	var twilio_to_number = "+1" + recipient
 	//return process.nextTick(function() {
 	var https, options, post_data, request;
 	https = require('https');
-	post_data = "From=" + twilio_from_number + "&To=" + twilio_to_number + "&Body=" + message;
+	post_data = "From=" + twilio_from_numbers[i] + "&To=" + twilio_to_number + "&Body=" + message;
 	options = {
 		host : 'api.twilio.com',
 		path : "/2010-04-01/Accounts/" + ACCOUNT_SID + "/SMS/Messages.json",
