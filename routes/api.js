@@ -35,6 +35,107 @@ var tweets
 // // console.log('Succeeded connected to: ' + uristring);
 // // }
 // });
+exports.deleterec = function(req, res) {
+	//	console.log(req.body.data)
+	db.Group.update({
+		_id : req.body.data.groupid
+	}, {
+		$pull : {
+			recipients : {
+				_id : req.body.data.recid,
+			}
+		}
+	}, {
+		upsert : true
+	}, function(err) {
+		//	console.log(err)
+	})
+	res.jsonp(req.params.id)
+}
+
+exports.newrec = function(req, res) {
+	db.Group.update({
+		_id : req.body.data.id
+	}, {
+		$push : {
+			recipients : {
+				name : req.body.data.name,
+				number : req.body.data.number,
+				valid : true,
+				_id : req.body.data.id + req.body.data.name
+			}
+		}
+	}, {
+		upsert : true
+	}, function(err) {
+		//	console.log(err)
+	})
+	res.jsonp(req.params.id)
+}
+
+exports.deletegroup = function(req, res) {
+	db.Group.update({
+		_id : req.body.data
+	}, {
+		$set : {
+			valid : false
+		}
+	}, {
+		upsert : true
+	}, function(err) {
+		//	console.log(err)
+	})
+	res.jsonp(req.params.id)
+}
+exports.newgroup = function(req, res) {
+	//console.log(req.body.data)
+	var group = new db.Group({
+		name : req.body.data,
+		dateCreated : new Date(),
+		valid : true
+	})
+
+	group.save(function(err) {
+		console.log('alert saved')
+		console.log(err)
+		if (err == null) {
+			res.json({
+				"group" : true
+			})
+			console.log('mongo success')
+		} else {
+			res.jsonp({
+				"group" : false
+			})
+		}
+	})
+}
+
+exports.groups = function(req, res) {
+	//console.log(req.params.id)
+	//var id = '*'
+	if (req.params.id == 'any') {
+		db.Group.find({
+			valid : true
+		}).exec(function(err, result) {
+			res.type('application/json');
+			res.jsonp({
+				data : result
+			})
+		})
+	} else {
+		db.Group.find({
+			valid : true,
+			_id : req.params.id
+		}).exec(function(err, result) {
+			res.type('application/json');
+			res.jsonp({
+				data : result
+			})
+		})
+	}
+
+}
 
 exports.alerts = function(req, res) {
 	db.Alert.find({
@@ -80,7 +181,7 @@ exports.twittersend = function(req, res) {
 }
 
 exports.alertsend = function(req, res) {
-	console.log(req.body)
+	//console.log(req.body)
 	var status = []
 	// console.log(req.body)
 	var dataRecord = new db.Alert({
@@ -161,20 +262,6 @@ function sendSMSMessage(message) {
 	return request.end;
 	//});
 };
-
-exports.signuppost = function(req, res) {
-	console.log(req)
-	var user = new db.User({
-		last_name : req.body.last_name,
-		first_name : req.body.first_name,
-		email : req.body.email,
-		twitter_username : req.body.twitter,
-		password : req.body.password
-	})
-	db.user.save(function(err) {
-
-	})
-}
 
 exports.shuttle = function(req, res) {
 	var today = new Date()

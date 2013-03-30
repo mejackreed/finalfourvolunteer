@@ -14,7 +14,7 @@ var mongoOptions = {
 };
 
 mongoose.connect(uristring, mongoOptions, function(err, res) {
-	
+
 });
 
 var tripSchema = new mongoose.Schema({

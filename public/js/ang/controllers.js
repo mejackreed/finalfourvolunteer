@@ -33,8 +33,128 @@ MyCtrl2.$inject = [];
 // console.log(data)
 // })
 // }
-function groupCtrl($scope, $resource) {
+function groupCtrl($scope, $resource, $http) {
+	$scope.currentPage = 0;
+	$scope.pageSize = 8;
+	$scope.numberOfPages = function() {
+		if ($scope.recipients == undefined) {
+			return ""
+		} else {
+			return Math.ceil($scope.recipients.length / $scope.pageSize);
+		}
+	}
 
+	$scope.showAddRec = false;
+	$scope.groups = $resource('/api/groups/:id'), {
+		callback : 'JSON_CALLBACK'
+	}, {
+		get : {
+			method : 'JSONP',
+		},
+		update : {
+			method : 'PUT',
+		}
+	}
+	$scope.groupResult = $scope.groups.get({
+		id : 'any'
+	})
+
+	$scope.getRecipients = function(group) {
+		$scope.currentPage = 0;
+		if (group == null) {
+			$scope.showAddRec = false;
+			$scope.recipients = null
+
+		} else {
+			//console.log(group)
+			$scope.activeGroupID = group._id
+			$scope.activeGroup = group;
+			$scope.groupName = group.name;
+			$scope.recipients = group.recipients;
+			$scope.showAddRec = true;
+		}
+	}
+	$scope.addRec = function() {
+		//	console.log($scope.newGroup)
+		//$scope.groupStatus = "icon-spinner icon-spin"
+		$http.put('/api/newrec', {
+			data : {
+				name : $scope.newRecName,
+				number : $scope.newRecNumber,
+				id : $scope.activeGroup._id
+			}
+		}).success(function(data) {
+			$scope.recipients.push({
+				name : $scope.newRecName,
+				number : $scope.newRecNumber,
+				_id : $scope.activeGroup._id + $scope.newRecName
+			})
+			//	console.log(data)
+			$scope.newRecName = '';
+			$scope.newRecNumber = '';
+			$scope.currentPage = $scope.numberOfPages() - 1
+
+			//		$scope.groupStatus = "icon-check"
+		}).error(function(data) {
+			//	console.log(data)
+			//		$scope.groupStatus = "icon-remove"
+
+		})
+	}
+
+	$scope.deleteRec = function(rec) {
+		$http.put('/api/deleterec', {
+			data : {
+				groupid : $scope.activeGroup._id,
+				recid : rec._id
+			}
+		}).success(function(data) {
+			var index = findWithAttr($scope.recipients, '_id', rec._id)
+			$scope.recipients.remove(index, index)
+
+		}).error(function(data) {
+		})
+		$scope.groupResult = $scope.groups.get({
+			id : 'any'
+		})
+
+	}
+
+	$scope.addGroup = function() {
+		$scope.groupStatus = "icon-spinner icon-spin"
+		$http.put('/api/newgroup', {
+			data : $scope.newGroup
+		}).success(function(data) {
+			$scope.groupStatus = "icon-check"
+		}).error(function(data) {
+			console.log(data)
+			$scope.groupStatus = "icon-remove"
+
+		})
+		$scope.newGroup = ''
+		$scope.groupResult = $scope.groups.get({
+			id : 'any'
+		})
+	}
+
+	$scope.deleteGroup = function(group) {
+		$scope.groupStatus = "icon-spinner icon-spin"
+		$http.put('/api/deletegroup', {
+			data : group._id
+		}).success(function(data) {
+			$scope.getRecipients(null)
+
+		}).error(function(data) {
+		})
+		$scope.groupResult = $scope.groups.get({
+			id : 'any'
+		})
+
+	}
+}
+
+function recipientCtrl($scope, $resource) {
+	//$scope.recipients =
 }
 
 function twitterCtrl($scope, $resource) {
@@ -168,3 +288,17 @@ function shuttleCtrl($scope, $resource) {
 
 	$scope.shuttleResult = $scope.shuttles.get();
 }
+
+function findWithAttr(array, attr, value) {
+	for (var i = 0; i < array.length; i += 1) {
+		if (array[i][attr] === value) {
+			return i;
+		}
+	}
+}
+
+Array.prototype.remove = function(from, to) {
+	var rest = this.slice((to || from) + 1 || this.length);
+	this.length = from < 0 ? this.length + from : from;
+	return this.push.apply(this, rest);
+};

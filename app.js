@@ -8,7 +8,6 @@ var flash = require('connect-flash');
 var db = ('./db.js')
 var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mongoose');
 
-
 var app = module.exports = express();
 
 // Configuration
@@ -51,11 +50,11 @@ passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-
 app.get('/', routes.index);
 app.get('/shuttle', routes.shuttle);
 app.get('/register', routes.register);
 app.get('/admin', ensureAuthenticated, routes.admin);
+app.get('/admin/groups', routes.groupmanage)
 
 app.get('/login', function(req, res) {
 	res.render('login', {
@@ -88,6 +87,7 @@ app.post('/register', function(req, res) {
 
 // JSON API
 //
+app.get('/api/groups/:id', api.groups)
 app.get('/api/shuttles', api.shuttle);
 app.get('/api/twitter', api.twitter)
 app.get('/api/alerts/:id', api.alerts)
@@ -95,9 +95,12 @@ app.put('/api/alerts/:id', apiAuth, api.alertput)
 app.put('/api/alertsend', apiAuth, api.alertsend)
 app.put('/api/twittersend', apiAuth, api.twittersend)
 
+app.put('/api/newgroup', api.newgroup)
+app.put('/api/deletegroup', api.deletegroup)
+app.put('/api/newrec', api.newrec)
+app.put('/api/deleterec', api.deleterec)
 
 app.get('*', routes.index);
-
 
 // Start server
 var port = process.env.PORT || 3000;

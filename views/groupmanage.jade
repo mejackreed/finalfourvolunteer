@@ -1,0 +1,65 @@
+extends layout
+
+block body
+  div.container-fluid.well
+    div.row-fluid(ng-controller='groupCtrl')
+      div.span6
+        h3 SMS Groups
+        table.table.table-hover
+          tr
+            th Group Name
+            th Number of Recipients
+            th
+          tr(ng-repeat="group in groupResult.data")
+            td {{group.name}}
+            td {{group.recipients.length}}
+            td 
+              button.btn.btn-small(ng-Click="getRecipients(group)") View/Edit
+              | &nbsp;
+              button.btn.btn-small.btn-danger(ng-Click='deleteGroup(group)') <i class='icon-remove'> </i>
+
+        div
+          h4 Add a new group
+          form.form-horizontal
+            .control-group
+              label.control-label(for='inputNewGroup') New group name
+              .controls
+                input(type='text', placeholder='Volunteer Group 1', ng-model = 'newGroup', name='inputNewGroup').control-group
+            .controls
+              button.btn(type = 'submit', ng-Click = 'addGroup()') Add
+            
+        
+      div.span6
+        h3 Recipients in {{groupName}}
+        table.table.table-hover(style='max-height : 200px;')
+          tr
+            th Name
+            th Number
+            th
+          tr(ng-show='recipients', ng-repeat = "recipient in recipients | startFrom:currentPage*pageSize | limitTo:pageSize") 
+            td {{recipient.name}}
+            td {{recipient.number | tel}}
+            td 
+              button.btn.btn-small.btn-danger(ng-Click='deleteRec(recipient)') <i class='icon-remove'> </i>
+              
+        button.btn.btn-small(ng-show='recipients.length > 0', ng-disabled="currentPage == 0", ng-click="currentPage=currentPage-1") Previous
+        span(ng-show='recipients.length > 0') &nbsp; {{currentPage+1}}/{{numberOfPages()}} &nbsp;
+        button.btn.btn-small(ng-show='recipients.length > 0', ng-disabled="currentPage >= recipients.length/pageSize - 1", ng-click="currentPage=currentPage+1") Next
+        hr
+
+        div(ng-show='showAddRec')
+          h4 Add a new recipient to selected group
+          form.form-horizontal
+            .control-group
+              label.control-label(for='inputNewRecName') Name
+              .controls
+                input(type='text', placeholder='Jane Smith', ng-model = 'newRecName', name='inputNewRecName')
+            .control-group
+              label.control-label(for='inputNewRecNumber', ngRequired = true) Phone number
+              .controls
+                input(type='text', placeholder='404-555-5555', ng-model = 'newRecNumber', name='inputNewRecNumber)
+            .controls
+              button.btn(type = 'submit', ng-Click = 'addRec()') Add
+              
+            
+         

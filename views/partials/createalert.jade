@@ -1,20 +1,24 @@
-div.span6.well(ng-controller='alertCreateCtrl', ng-cloak)
-  h3 Add new system alert
+div.span12.well(ng-controller='alertCreateCtrl', ng-cloak)
   div.row-fluid
-    form(name='alertForm')
-      textarea#alertText(placeholder='Type message to be sent to volunteers', rows='3', ng-model='message',  ng-MinLength= 1 , ng-MaxLength= 140, name='message')
-      div(class="error", ng-show="!alertForm.$valid") Alert must be between 1 and 140 characters
+    div.span6
+      h3 Add new system alert
+      form(name='alertForm')
+        textarea#alertText.span6(placeholder='Type message to be sent to volunteers', rows='6', ng-model='message',  ng-MinLength= 1 , ng-MaxLength= 140, name='message')
+        div(class="error", ng-show="!alertForm.$valid") Alert must be between 1 and 140 characters
+        div
+          small ({{message.length}} of 140)
       div
-        small ({{message.length}} of 140)
-    div
-      form
-        label.checkbox
-          input(type="checkbox", ng-model="postTwitter") 
-          | Send to Twitter? <i class="{{twitterStatus}}"></i>
-        label.checkbox
-          input(type="checkbox", ng-model="postWebsite") 
-          | Send to website? <i class="{{websiteStatus}}"></i>
-        label.checkbox
-          input(type="checkbox", ng-model="postSMS") 
-          | Send to SMS? <i class="{{smsStatus}}"></i>
+        form
+          label.checkbox
+            input(type="checkbox", ng-model="postTwitter") 
+            | Send to Twitter? <i class="{{twitterStatus}}"></i>
+          label.checkbox
+            input(type="checkbox", ng-model="postWebsite") 
+            | Send to website? <i class="{{websiteStatus}}"></i>
+          label.checkbox
+            input(type="checkbox", ng-model="postSMS") 
+            | Send to SMS? <i class="{{smsStatus}}"></i>
+    div.span6
+      h3 SMS Groups to send to
+      a(href='/admin/groups') Manage Groups
   button(href="#", ng-click='sendAlert()').btn {{button}}

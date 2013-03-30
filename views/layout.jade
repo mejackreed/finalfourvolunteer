@@ -31,10 +31,9 @@ html(ng-app='app')
 									a(href="/") Home
 								li
 									a(href="/shuttle") Shuttle
-								li
-									a(href="/login") Login
-								li
-									a(href="/admin") Admin
+								if (typeof(user) != 'undefined')
+									li
+										a(href="/admin") Admin
 						div.navbar-text.pull-right 
 							if (typeof(user) == 'undefined')
 								a(href='/login') Login
@@ -43,7 +42,7 @@ html(ng-app='app')
 								a(href='/logout') Logout
 						
 									
-		div.container-fluid
+		div.container-fluid(ng-cloak)
 			block body
 		script(src='js/lib/angular/angular.min.js')
 		script(src='js/lib/angular/angular-resource.min.js')
