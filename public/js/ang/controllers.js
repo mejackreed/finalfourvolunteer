@@ -23,16 +23,7 @@ function MyCtrl2() {
 
 MyCtrl2.$inject = [];
 
-// var HomeCtrl = function($scope, $routeParams, $location, $resource) {
-// var AlertDB = $resource('/api/alerts/:id', {
-// id : '@_id'
-// });
-// AlertDB.get({
-//
-// }, function(data) {
-// console.log(data)
-// })
-// }
+
 function groupCtrl($scope, $resource, $http) {
 	$scope.currentPage = 0;
 	$scope.pageSize = 8;
