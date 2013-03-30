@@ -21,4 +21,14 @@ div.span12.well(ng-controller='alertCreateCtrl', ng-cloak)
     div.span6
       h3 SMS Groups to send to
       a(href='/admin/groups') Manage Groups
+      table.table.table-hover
+        tr
+          th Send?
+          th Group Name
+          th Number of Recipients
+        tr(ng-repeat="group in groupResult.data")
+          th
+            input(type='checkbox', ng-model= 'group.send')
+          th {{group.name}}
+          th {{group.recipients.length}}
   button(href="#", ng-click='sendAlert()').btn {{button}}

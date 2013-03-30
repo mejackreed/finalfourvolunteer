@@ -1,5 +1,6 @@
 //4048095070
 var db = require('../db.js');
+var _ = require("underscore");
 
 var ACCOUNT_SID = process.env.TWILIO_SID;
 var AUTH_TOKEN = process.env.TWILIO_TOKEN;
@@ -50,7 +51,7 @@ exports.deleterec = function(req, res) {
 	}, function(err) {
 		//	console.log(err)
 	})
-	res.jsonp(req.params.id)
+	res.json(req.params.id)
 }
 
 exports.newrec = function(req, res) {
@@ -70,7 +71,7 @@ exports.newrec = function(req, res) {
 	}, function(err) {
 		//	console.log(err)
 	})
-	res.jsonp(req.params.id)
+	res.json(req.params.id)
 }
 
 exports.deletegroup = function(req, res) {
@@ -85,7 +86,7 @@ exports.deletegroup = function(req, res) {
 	}, function(err) {
 		//	console.log(err)
 	})
-	res.jsonp(req.params.id)
+	res.json(req.params.id)
 }
 exports.newgroup = function(req, res) {
 	//console.log(req.body.data)
@@ -209,6 +210,19 @@ exports.alertsend = function(req, res) {
 		res.jsonp(status)
 	}
 }
+
+exports.smssend = function(req, res) {
+	var message = req.body.data.message
+	var recipients = req.body.data.recipients
+	console.log(message)
+	console.log(recipients)
+	_.each(recipients, function(rec) {
+		sendSMSMessage(message, rec)
+	})
+	res.jsonp({
+		data : 'success'
+	})
+}
 function sss() {
 	client.sendSms({
 		to : '+14043763550', // Any number Twilio can deliver to
@@ -232,8 +246,8 @@ function sss() {
 	});
 }
 
-function sendSMSMessage(message) {
-	var twilio_to_number = "+14043763550"
+function sendSMSMessage(message, recipient) {
+	var twilio_to_number = "+1" + recipient
 	//return process.nextTick(function() {
 	var https, options, post_data, request;
 	https = require('https');

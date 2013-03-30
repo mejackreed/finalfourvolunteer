@@ -34,6 +34,10 @@ html(ng-app='app')
 								if (typeof(user) != 'undefined')
 									li
 										a(href="/admin") Admin
+									li
+										a(href="/admin/groups") Manage Groups
+								li
+									a(href="/about") About
 						div.navbar-text.pull-right 
 							if (typeof(user) == 'undefined')
 								a(href='/login') Login

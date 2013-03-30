@@ -10,6 +10,15 @@ exports.index = function(req, res) {
 	});
 };
 
+
+exports.about = function(req, res) {
+	res.render('about', {
+		user : req.user
+
+	});
+};
+
+
 exports.shuttle = function(req, res) {
 	res.render('shuttle', {
 		user : req.user

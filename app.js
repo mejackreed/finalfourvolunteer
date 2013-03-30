@@ -51,10 +51,11 @@ passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
 app.get('/', routes.index);
+app.get('/about', routes.about);
 app.get('/shuttle', routes.shuttle);
 app.get('/register', routes.register);
 app.get('/admin', ensureAuthenticated, routes.admin);
-app.get('/admin/groups', routes.groupmanage)
+app.get('/admin/groups', ensureAuthenticated, routes.groupmanage)
 
 app.get('/login', function(req, res) {
 	res.render('login', {
@@ -94,11 +95,12 @@ app.get('/api/alerts/:id', api.alerts)
 app.put('/api/alerts/:id', apiAuth, api.alertput)
 app.put('/api/alertsend', apiAuth, api.alertsend)
 app.put('/api/twittersend', apiAuth, api.twittersend)
+app.put('/api/smssend', apiAuth, api.smssend)
 
-app.put('/api/newgroup', api.newgroup)
-app.put('/api/deletegroup', api.deletegroup)
-app.put('/api/newrec', api.newrec)
-app.put('/api/deleterec', api.deleterec)
+app.put('/api/newgroup', apiAuth, api.newgroup)
+app.put('/api/deletegroup', apiAuth, api.deletegroup)
+app.put('/api/newrec', apiAuth, api.newrec)
+app.put('/api/deleterec', apiAuth, api.deleterec)
 
 app.get('*', routes.index);
 

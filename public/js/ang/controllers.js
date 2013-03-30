@@ -103,21 +103,23 @@ function groupCtrl($scope, $resource, $http) {
 	}
 
 	$scope.deleteRec = function(rec) {
-		$http.put('/api/deleterec', {
-			data : {
-				groupid : $scope.activeGroup._id,
-				recid : rec._id
-			}
-		}).success(function(data) {
-			var index = findWithAttr($scope.recipients, '_id', rec._id)
-			$scope.recipients.remove(index, index)
+		if (confirm('Are you sure you want to delete this recipient from this group?')) {
+			$http.put('/api/deleterec', {
+				data : {
+					groupid : $scope.activeGroup._id,
+					recid : rec._id
+				}
+			}).success(function(data) {
+				var index = findWithAttr($scope.recipients, '_id', rec._id)
+				$scope.recipients.remove(index, index)
 
-		}).error(function(data) {
-		})
-		$scope.groupResult = $scope.groups.get({
-			id : 'any'
-		})
+			}).error(function(data) {
+			})
+			$scope.groupResult = $scope.groups.get({
+				id : 'any'
+			})
 
+		}
 	}
 
 	$scope.addGroup = function() {
@@ -138,18 +140,20 @@ function groupCtrl($scope, $resource, $http) {
 	}
 
 	$scope.deleteGroup = function(group) {
-		$scope.groupStatus = "icon-spinner icon-spin"
-		$http.put('/api/deletegroup', {
-			data : group._id
-		}).success(function(data) {
-			$scope.getRecipients(null)
+		if (confirm('Are you sure you want to delete this group?')) {
+			$scope.groupStatus = "icon-spinner icon-spin"
+			$http.put('/api/deletegroup', {
+				data : group._id
+			}).success(function(data) {
+				$scope.getRecipients(null)
 
-		}).error(function(data) {
-		})
-		$scope.groupResult = $scope.groups.get({
-			id : 'any'
-		})
+			}).error(function(data) {
+			})
+			$scope.groupResult = $scope.groups.get({
+				id : 'any'
+			})
 
+		}
 	}
 }
 
@@ -184,8 +188,22 @@ function alertCreateCtrl($scope, $resource, $http) {
 		$scope.websiteStatus = "";
 		$scope.smsStatus = "";
 		$scope.twitterStatus = "";
-
 	}
+
+	$scope.groups = $resource('/api/groups/:id'), {
+		callback : 'JSON_CALLBACK'
+	}, {
+		get : {
+			method : 'JSONP',
+		},
+		update : {
+			method : 'PUT',
+		}
+	}
+	$scope.groupResult = $scope.groups.get({
+		id : 'any'
+	})
+
 	$scope.sendAlert = function() {
 		if ($scope.message.length > 0 && $scope.message.length < 140) {
 			if ($scope.postWebsite) {
@@ -207,9 +225,23 @@ function alertCreateCtrl($scope, $resource, $http) {
 				})
 			}
 			if ($scope.postSMS) {
+
+				var groupToSend = _.findWhere($scope.groupResult.data, {
+					send : true
+				})
+				var recipients = [];
+
+				console.log(groupToSend.recipients[0])
+				$.each(groupToSend.recipients, function(i, value) {
+					recipients.push(value.number);
+				})
+				//console.log(recipients)
 				$scope.smsStatus = "icon-spinner icon-spin"
 				$http.put('/api/smssend', {
-					data : $scope.message
+					data : {
+						message : $scope.message,
+						recipients : recipients
+					}
 				}).success(function(data) {
 					$scope.smsStatus = "icon-check"
 				}).error(function(data) {
