@@ -67,6 +67,7 @@ app.get('/login', function(req, res) {
 });
 
 app.post('/login', passport.authenticate('local'), function(req, res) {
+	console.log(res)
 	res.redirect('/');
 });
 
@@ -76,17 +77,20 @@ app.get('/logout', function(req, res) {
 });
 
 app.post('/register', function(req, res) {
-	Account.register(new Account({
-		username : req.body.username
-	}), req.body.password, function(err, account) {
-		if (err) {
-			return res.render('register', {
-				account : account
-			});
-		}
+	if (req.body.code == process.env.REGCODE) {
+		Account.register(new Account({
+			username : req.body.username
+		}), req.body.password, function(err, account) {
+			if (err) {
+				console.log(err)
+				return res.render('register', {
+					account : account
+				});
+			}
 
-		res.redirect('/');
-	});
+			res.redirect('/');
+		});
+	}
 });
 
 // JSON API
