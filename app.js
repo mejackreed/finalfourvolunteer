@@ -123,6 +123,7 @@ function apiAuth(req, res, next) {
 }
 
 function ensureAuthenticated(req, res, next) {
+	console.log(req._passport.session.user)
 	if (req.isAuthenticated()) {
 		return next();
 	}
