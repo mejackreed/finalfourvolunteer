@@ -23,6 +23,7 @@
     "twit": "~1.1.6",
     "underscore": "~1.4.4",
     "util": "~0.4.9",
-    "connect-ensure-login": "~0.1.0"
+    "connect-ensure-login": "~0.1.0",
+    "connect": "~2.7.3"
   }
 }

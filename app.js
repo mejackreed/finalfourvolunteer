@@ -6,9 +6,28 @@
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 var db = ('./db.js')
+var MongoStore = require('connect-mongo')(express);
+
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mongoose');
 var app = module.exports = express();
+
+var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
+var mongoOptions = {
+	db : {
+		safe : true
+	}
+};
+var dbconnect = mongoose.connect(uristring, mongoOptions, function(err, res) {
+	// if (err) {
+	// console.log('ERROR connecting to: ' + uristring + '. ' + err);
+	// } else {
+	// console.log('Succeeded connected to: ' + uristring);
+	// }
+});
+var dboptions = {
+	mongoose_connection : dbconnect.connections[0]
+};
 
 var userSchema = new mongoose.Schema({
 	username : {
@@ -47,7 +66,11 @@ app.configure(function() {
 		},
 		secret : process.env.SECRET,
 		maxAge : new Date(Date.now() + 3600000),
-
+		store : new MongoStore({
+			mongoose_connection : dbconnect.connections[0]
+		}, function(err) {
+			console.log(err || 'connect-mongodb setup ok');
+		})
 	}));
 	app.use(flash());
 	app.use(passport.initialize());
