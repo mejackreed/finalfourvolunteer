@@ -19,34 +19,12 @@ var mongoOptions = {
 	}
 };
 var dbconnect = mongoose.connect(uristring, mongoOptions, function(err, res) {
-	// if (err) {
-	// console.log('ERROR connecting to: ' + uristring + '. ' + err);
-	// } else {
-	// console.log('Succeeded connected to: ' + uristring);
-	// }
+
 });
 var dboptions = {
 	mongoose_connection : dbconnect.connections[0]
 };
 
-// var userSchema = new mongoose.Schema({
-// username : {
-// type : String
-// },
-// password : {
-// type : String
-// }
-// })
-// userSchema.methods.validPassword = function(password) {
-// if (password === this.password) {
-// return true;
-// } else {
-// return false;
-// }
-// }
-// var User = mongoose.model('User', userSchema);
-
-// Configuration
 
 app.configure(function() {
 	app.set('views', __dirname + '/views');
@@ -92,36 +70,6 @@ passport.use(Account.createStrategy());
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-// passport.serializeUser(function(user, done) {
-// done(null, user);
-// });
-//
-// passport.deserializeUser(function(obj, done) {
-// done(null, obj);
-// });
-//
-// passport.use(new LocalStrategy(function(username, password, done) {
-// User.findOne({
-// username : username
-// }, function(err, user) {
-// if (err) {
-// return done(err);
-// }
-// if (!user) {
-// return done(null, false, {
-// message : 'Incorrect username.'
-// });
-// }
-// if (!user.validPassword(password)) {
-// return done(null, false, {
-// message : 'Incorrect password.'
-// });
-// }
-// return done(null, user);
-// });
-// }));
-
-// use static serialize and deserialize of model for passport session support
 
 app.get('/', routes.index);
 app.get('/about', routes.about);
