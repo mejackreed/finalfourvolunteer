@@ -22,9 +22,9 @@ app.configure(function() {
 	app.use(flash());
 	app.use(express.cookieParser());
 	app.use(express.session({
-		secret : 'keyboard cat'
+		secret : process.env.SECRET
 	}));
-	//npapp.use(mongooseAuth.middleware())
+	//app.use(mongooseAuth.middleware())
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.use(app.router);
@@ -38,7 +38,10 @@ app.configure('development', function() {
 });
 
 app.configure('production', function() {
-	app.use(express.errorHandler());
+	app.use(express.errorHandler({
+		dumpExceptions : true,
+		showStack : true
+	}));
 });
 
 // requires the model with Passport-Local Mongoose plugged in
