@@ -69,8 +69,10 @@ app.get('/login', function(req, res) {
 	});
 });
 
-app.post('/login', passport.authenticate('local'), function(req, res) {
-	//console.log(res)
+app.post('/login', passport.authenticate('local', {
+	failureRedirect : '/login'
+}), function(req, res) {
+	console.log(res.body)
 	res.redirect('/');
 });
 
@@ -93,7 +95,7 @@ app.post('/register', function(req, res) {
 
 			res.redirect('/');
 		});
-	}else{
+	} else {
 		res.redirect('/');
 	}
 });
