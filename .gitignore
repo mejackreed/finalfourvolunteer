@@ -3,3 +3,4 @@
 .env
 createUser.js
 groupdata.csv
+sample.out
