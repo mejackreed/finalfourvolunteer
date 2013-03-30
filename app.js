@@ -62,12 +62,12 @@ app.get('/admin/groups', ensureAuthenticated, routes.groupmanage)
 
 app.get('/login', function(req, res) {
 	res.render('login', {
-		userName : req.user
+		user : req.user
 	});
 });
 
 app.post('/login', passport.authenticate('local'), function(req, res) {
-	console.log(res)
+	//console.log(res)
 	res.redirect('/');
 });
 
