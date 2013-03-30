@@ -19,15 +19,12 @@ app.configure(function() {
 	app.use(express.methodOverride());
 
 	app.use(express.static(__dirname + '/public'));
-	app.use(flash());
-	app.use(express.cookieParser());
+	app.use(express.cookieParser(process.env.SECRET));
 	app.use(express.session({
-		secret : process.env.SECRET,
 		cookie : {
 			maxAge : 60000
 		}
 	}));
-	//app.use(mongooseAuth.middleware())
 	app.use(passport.initialize());
 	app.use(passport.session());
 	app.use(app.router);
