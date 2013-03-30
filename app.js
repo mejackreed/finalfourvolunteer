@@ -29,29 +29,24 @@ var dboptions = {
 	mongoose_connection : dbconnect.connections[0]
 };
 
-var userSchema = new mongoose.Schema({
-	username : {
-		type : String
-	},
-	password : {
-		type : String
-	}
-})
-userSchema.methods.validPassword = function(password) {
-	if (password === this.password) {
-		return true;
-	} else {
-		return false;
-	}
-}
-var User = mongoose.model('User', userSchema);
+// var userSchema = new mongoose.Schema({
+// username : {
+// type : String
+// },
+// password : {
+// type : String
+// }
+// })
+// userSchema.methods.validPassword = function(password) {
+// if (password === this.password) {
+// return true;
+// } else {
+// return false;
+// }
+// }
+// var User = mongoose.model('User', userSchema);
 
 // Configuration
-
-// var Account = require('./models/account');
-// passport.use(Account.createStrategy());
-// passport.serializeUser(Account.serializeUser());
-// passport.deserializeUser(Account.deserializeUser());
 
 app.configure(function() {
 	app.set('views', __dirname + '/views');
@@ -92,34 +87,39 @@ app.configure('production', function() {
 	}));
 });
 
-passport.serializeUser(function(user, done) {
-	done(null, user);
-});
+var Account = require('./models/account');
+passport.use(Account.createStrategy());
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
-passport.deserializeUser(function(obj, done) {
-	done(null, obj);
-});
-
-passport.use(new LocalStrategy(function(username, password, done) {
-	User.findOne({
-		username : username
-	}, function(err, user) {
-		if (err) {
-			return done(err);
-		}
-		if (!user) {
-			return done(null, false, {
-				message : 'Incorrect username.'
-			});
-		}
-		if (!user.validPassword(password)) {
-			return done(null, false, {
-				message : 'Incorrect password.'
-			});
-		}
-		return done(null, user);
-	});
-}));
+// passport.serializeUser(function(user, done) {
+// done(null, user);
+// });
+//
+// passport.deserializeUser(function(obj, done) {
+// done(null, obj);
+// });
+//
+// passport.use(new LocalStrategy(function(username, password, done) {
+// User.findOne({
+// username : username
+// }, function(err, user) {
+// if (err) {
+// return done(err);
+// }
+// if (!user) {
+// return done(null, false, {
+// message : 'Incorrect username.'
+// });
+// }
+// if (!user.validPassword(password)) {
+// return done(null, false, {
+// message : 'Incorrect password.'
+// });
+// }
+// return done(null, user);
+// });
+// }));
 
 // use static serialize and deserialize of model for passport session support
 
@@ -147,24 +147,24 @@ app.get('/logout', function(req, res) {
 	res.redirect('/');
 });
 
-// app.post('/register', function(req, res) {
-// if (req.body.code == process.env.REGCODE) {
-// Account.register(new Account({
-// username : req.body.username
-// }), req.body.password, function(err, account) {
-// if (err) {
-// console.log(err)
-// return res.render('register', {
-// account : account
-// });
-// }
-//
-// res.redirect('/');
-// });
-// } else {
-// res.redirect('/');
-// }
-// });
+app.post('/register', function(req, res) {
+	if (req.body.code == process.env.REGCODE) {
+		Account.register(new Account({
+			username : req.body.username
+		}), req.body.password, function(err, account) {
+			if (err) {
+				console.log(err)
+				return res.render('register', {
+					account : account
+				});
+			}
+
+			res.redirect('/');
+		});
+	} else {
+		res.redirect('/');
+	}
+});
 
 // JSON API
 //
@@ -193,10 +193,10 @@ app.listen(port, function() {
 
 function apiAuth(req, res, next) {
 	//	console.log(req._passport.session.user)
-	//	if (req._passport.session.user != undefined) {
-	return next();
-	//	}
-	//	res.redirect('/login')
+	if (req._passport.session.user != undefined) {
+		return next();
+	}
+	res.redirect('/login')
 }
 
 function ensureAuthenticated(req, res, next) {

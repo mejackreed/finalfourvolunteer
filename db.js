@@ -70,7 +70,6 @@ var tripSchema = new Schema({
 		type : Date
 	}
 })
-
 exports.Group = mongoose.model('groups', groupSchema);
 exports.User = mongoose.model('users', userSchema);
 exports.ShuttleTrips = mongoose.model('shuttleTrips', tripSchema);
