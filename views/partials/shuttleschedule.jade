@@ -7,7 +7,7 @@ div.span6(ng-controller='shuttleCtrl').well
       th Pickup Location
       th Dropoff Time
       th Dropoff Location
-    tr(ng-repeat='shuttle in shuttleResult.data | orderBy:pickupTime')
+    tr(ng-repeat='shuttle in shuttleResult.data | orderBy:pickupTime | limitTo:10')
       td {{shuttle.pickupTime | date:'short'}}
       td(ng-bind-html-unsafe="shuttle.pickupLocation | checkLoc")
       td {{shuttle.dropoffTime | date:'short'}}
