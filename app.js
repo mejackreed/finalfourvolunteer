@@ -50,7 +50,7 @@ app.configure('production', function() {
 // requires the model with Passport-Local Mongoose plugged in
 var Account = require('./models/account');
 // use static authenticate method of model in LocalStrategy
-passport.use(new LocalStrategy(Account.authenticate()));
+passport.use(Account.createStrategy());
 
 // use static serialize and deserialize of model for passport session support
 passport.serializeUser(Account.serializeUser());
@@ -93,6 +93,8 @@ app.post('/register', function(req, res) {
 
 			res.redirect('/');
 		});
+	}else{
+		res.redirect('/');
 	}
 });
 

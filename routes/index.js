@@ -1,7 +1,6 @@
 /*
  * GET home page.
  */
-var userName = ""
 
 exports.index = function(req, res) {
 	console.log(req.user)
