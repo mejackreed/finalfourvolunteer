@@ -55,8 +55,8 @@ app.get('/', routes.index);
 app.get('/about', routes.about);
 app.get('/shuttle', routes.shuttle);
 app.get('/register', routes.register);
-app.get('/admin', ensureAuthenticated, routes.admin);
-app.get('/admin/groups', ensureAuthenticated, routes.groupmanage)
+app.get('/admin', routes.admin);
+app.get('/admin/groups', routes.groupmanage)
 
 app.get('/login', function(req, res) {
 	res.render('login', {
@@ -67,7 +67,7 @@ app.get('/login', function(req, res) {
 app.post('/login', passport.authenticate('local', {
 	failureRedirect : '/login'
 }), function(req, res) {
-	console.log(res.body)
+	console.log(res)
 	res.redirect('/');
 });
 
@@ -101,15 +101,15 @@ app.get('/api/groups/:id', api.groups)
 app.get('/api/shuttles', api.shuttle);
 app.get('/api/twitter', api.twitter)
 app.get('/api/alerts/:id', api.alerts)
-app.put('/api/alerts/:id', apiAuth, api.alertput)
-app.put('/api/alertsend', apiAuth, api.alertsend)
-app.put('/api/twittersend', apiAuth, api.twittersend)
-app.put('/api/smssend', apiAuth, api.smssend)
+app.put('/api/alerts/:id', api.alertput) //lock down
+app.put('/api/alertsend', api.alertsend)//lock down
+app.put('/api/twittersend', api.twittersend)//lock down
+app.put('/api/smssend', api.smssend)//lock down
 
-app.put('/api/newgroup', apiAuth, api.newgroup)
-app.put('/api/deletegroup', apiAuth, api.deletegroup)
-app.put('/api/newrec', apiAuth, api.newrec)
-app.put('/api/deleterec', apiAuth, api.deleterec)
+app.put('/api/newgroup', api.newgroup)//lock down
+app.put('/api/deletegroup', api.deletegroup)//lock down
+app.put('/api/newrec',  api.newrec)//lock down
+app.put('/api/deleterec', api.deleterec)//lock down
 
 app.get('*', routes.index);
 
