@@ -23,7 +23,6 @@ function MyCtrl2() {
 
 MyCtrl2.$inject = [];
 
-
 function groupCtrl($scope, $resource, $http) {
 	$scope.currentPage = 0;
 	$scope.pageSize = 8;
@@ -308,6 +307,15 @@ function shuttleCtrl($scope, $resource) {
 			method : 'JSONP'
 		}
 	});
+	$scope.currentPage = 0;
+	$scope.pageSize = 8;
+	$scope.numberOfPages = function() {
+		if ($scope.shuttleResult.data == undefined) {
+			return ""
+		} else {
+			return Math.ceil($scope.shuttleResult.data.length / $scope.pageSize);
+		}
+	}
 
 	$scope.shuttleResult = $scope.shuttles.get();
 }

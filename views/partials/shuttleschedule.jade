@@ -7,9 +7,11 @@ div.span6(ng-controller='shuttleCtrl').well
       th Pickup Location
       th Dropoff Time
       th Dropoff Location
-    tr(ng-repeat='shuttle in shuttleResult.data | orderBy:pickupTime | limitTo:10')
+    tr(ng-repeat='shuttle in shuttleResult.data | orderBy:pickupTime | startFrom:currentPage*pageSize | limitTo:pageSize')
       td {{shuttle.pickupTime | date:'short'}}
       td(ng-bind-html-unsafe="shuttle.pickupLocation | checkLoc")
       td {{shuttle.dropoffTime | date:'short'}}
       td(ng-bind-html-unsafe="shuttle.dropoffLocation | checkLoc")
-      
+  button.btn.btn-small(ng-show='shuttleResult.data.length > 0', ng-disabled="currentPage == 0", ng-click="currentPage=currentPage-1") Previous
+  span(ng-show='shuttleResult.data.length > 0') &nbsp; {{currentPage+1}}/{{numberOfPages()}} &nbsp;
+  button.btn.btn-small(ng-show='shuttleResult.data.length > 0', ng-disabled="currentPage >= shuttleResult.data.length/pageSize - 1", ng-click="currentPage=currentPage+1") Next
