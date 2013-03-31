@@ -12,7 +12,7 @@ $(window).load(function() {
 	$(window).resize(function() {
 		var h = $(window).height(), offsetTop = 175
 		var w = $(window).width()
-		if (w > 760) {
+		if (w < 760) {
 			offsetTop = 50;
 		}
 
