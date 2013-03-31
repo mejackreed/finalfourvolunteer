@@ -21,11 +21,12 @@ a:hover, user-name {
 	color:#333333;
 }
 #footer {
-	padding-top:80px;
+	padding-top:20px;
 }
 #map {
 	height:740px;
 }
 .leaflet-popup-content {
 	color:#333333;
+	max-width: 200px;
 }
