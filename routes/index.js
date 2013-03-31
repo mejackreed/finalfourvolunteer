@@ -9,9 +9,9 @@ exports.index = function(req, res) {
 	});
 };
 
-exports.about = function(req, res) {
+exports.map = function(req, res) {
 	console.log(req.user)
-	res.render('about', {
+	res.render('map', {
 		user : req.user
 	});
 };

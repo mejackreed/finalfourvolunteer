@@ -20,3 +20,12 @@ a:hover, user-name {
 .modal-header h3 {
 	color:#333333;
 }
+#footer {
+	padding-top:80px;
+}
+#map {
+	height:740px;
+}
+.leaflet-popup-content {
+	color:#333333;
+}

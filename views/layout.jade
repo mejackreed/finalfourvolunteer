@@ -8,6 +8,7 @@ html(ng-app='app')
   link(href="/css/bootstrap.min.css", rel="stylesheet")
   link(href="/css/bootstrap-responsive.min.css", rel="stylesheet")
   link(href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css", rel="stylesheet")
+  block head
   link(rel='stylesheet', href='/css/app.css')
   script(src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
   script(src='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js')
@@ -39,7 +40,7 @@ html(ng-app='app')
                 li
                   a(href="/admin/groups") Manage Groups
               li
-                a(href="/about") About
+                a(href="/map") Map
           div.navbar-text.pull-right.hidden-phone
             if (typeof(user) == 'undefined')
               a(href='/login') Login
@@ -64,3 +65,6 @@ html(ng-app='app')
       g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
       s.parentNode.insertBefore(g,s)}(document,'script'));
     block scripts
+    
+    div#footer
+      p.credit.muted.pagination-centered Built by <a href='http://www.twitter.com/openatlanta'>John Kirkley</a> and <a href='http://www.twitter.com/mejackreed'>Jack Reed</a> during the <a href='http://atlhoopshack.challengepost.com/'>ATL Hoops Hackathon</a>

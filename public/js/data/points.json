@@ -1,0 +1,43 @@
+var points = {
+	"type": "FeatureCollection",
+	"features": [
+		{
+			"type": "Feature",
+			"properties": {
+				"Name": "Atlanta Local Organizing Committee (ALOC) Control Center",
+				"Description": ""
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-84.387554,33.761697]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"Name": "Georgia World Congress Center",
+				"icon" : "/images/information.png",
+				"Description": "Shuttle dropoff point"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-84.39568,33.758226]
+			}
+		},
+		{
+			"type": "Feature",
+			"properties": {
+				"Name": "Atlanta Civic Center",
+				"Description": "Shuttle pickup point and volunteer parking"
+			},
+			"geometry": {
+				"type": "Point",
+				"coordinates": [-84.382018,33.765764]
+			}
+		}
+	]
+};
+
+
+
+
