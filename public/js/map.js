@@ -1,7 +1,21 @@
+var h = $(window).height(), offsetTop = 175
+var w = $(window).width()
+if (w < 760) {
+	offsetTop = 50;
+	$('body').css('padding-left', 0)
+	$('body').css('padding-right', 0)
+
+}
+
 $(window).load(function() {
+
 	$(window).resize(function() {
 		var h = $(window).height(), offsetTop = 175
-		var w = $(window).width(), offsetLeft = 345;
+		var w = $(window).width()
+		if (w > 760) {
+			offsetTop = 50;
+		}
+
 		$('#map').css('height', (h - offsetTop));
 		// $('#map-canvas').css('width', (w - offsetLeft));
 		// $('#map-canvas').css('top', mapOffsetTop);
@@ -11,7 +25,7 @@ $(window).load(function() {
 	// $('.navbar-extra').hide();
 	// }
 	// var w = $(window).width(), offsetLeft = 345;
-	var h = $(window).height(), offsetTop = 175
+	//var h = $(window).height(), offsetTop = 100
 
 	$('#map').css('height', (h - offsetTop))
 });
@@ -34,9 +48,9 @@ $(document).ready(function() {
 	function onEachFeature(feature, layer) {
 		// console.log(layer)
 		// if (feature.properties.icon != undefined) {
-			// layer.setIcon.layer.setIcon(new L.Icon({
-				// iconUrl : feature.properties.icon
-			// }))
+		// layer.setIcon.layer.setIcon(new L.Icon({
+		// iconUrl : feature.properties.icon
+		// }))
 		// }
 
 		var html = '<b>' + feature.properties.Name + '</b>'
