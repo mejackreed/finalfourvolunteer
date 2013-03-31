@@ -13,10 +13,10 @@ html(ng-app='app')
   
   body
     div.container-fluid
-      div.media
+      div.media.hidden-phone
         a.pull-left(href='/#')
           img(src='/images/finalfour.png').media-object
-        h2.hidden-mobile Final Four Volunteers
+        h2 Final Four Volunteers
         p.lead Final Four Volunteer Resources
     div.navbar
       div.navbar-inner
@@ -25,6 +25,7 @@ html(ng-app='app')
             span(class="icon-bar")
             span(class="icon-bar")
             span(class="icon-bar")
+          a(class="brand", href="/#") Final Four Volunteers
           div.nav-collapse.collapse
             ul.nav
               li
