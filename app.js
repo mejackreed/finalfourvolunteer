@@ -12,7 +12,14 @@ var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mo
 var app = module.exports = express();
 
 var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
-
+var mongoOptions = {
+	db : {
+		safe : true
+	}
+};
+var dbconnect = mongoose.connect(uristring, mongoOptions, function(err, res) {
+});
+console.log()
 
 app.configure(function() {
 	app.set('views', __dirname + '/views');
@@ -28,7 +35,7 @@ app.configure(function() {
 		secret : process.env.SECRET,
 		maxAge : new Date(Date.now() + 3600000),
 		store : new MongoStore({
-			url : uristring,
+			mongoose_connection : dbconnect.connections[0],
 			auto_reconnect : true
 		})
 	}));
