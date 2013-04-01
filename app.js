@@ -71,6 +71,11 @@ app.get('/register', routes.register);
 app.get('/admin', ensureLoggedIn('/login'), routes.admin);
 app.get('/admin/groups', ensureLoggedIn('/login'), routes.groupmanage)
 
+app.get('/welcome/sms', function(req, res) {
+	res.set('Content-Type', 'text/xml');
+	res.send("<?xml version='1.0' ?><Response><Sms>Official Final Four Volunteer line. Note messages sent to this number are not monitored. Reply HELP for help.Reply STOP to unsubscribe.Msg&Data rates may apply.</Sms></Response>")
+})
+
 app.get('/login', function(req, res) {
 	res.render('login', {
 		user : req.user
