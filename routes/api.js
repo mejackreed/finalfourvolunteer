@@ -171,8 +171,8 @@ exports.alertsend = function(req, res) {
 	var status = []
 	// console.log(req.body)
 	var dataRecord = new db.Alert({
-		alertText : req.body.data,
-		alertStatus : true,
+		alertText : req.body.data.message,
+		alertStatus : req.body.data.alertStatus,
 		alertTime : Date()
 	})
 	dataRecord.save(function(err) {

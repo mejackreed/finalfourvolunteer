@@ -198,13 +198,17 @@ function alertCreateCtrl($scope, $resource, $http) {
 		if ($scope.message.length > 0 && $scope.message.length < 140) {
 			if ($scope.postWebsite) {
 				$scope.websiteStatus = "icon-spinner icon-spin"
-				$http.put('/api/alertsend', {
-					data : $scope.message
-				}).success(function(data) {
-					$scope.websiteStatus = "icon-check"
-					//console.log(data)
-				})
 			}
+			$http.put('/api/alertsend', {
+				data : {
+					message : $scope.message,
+					alertStatus : $scope.postWebsite
+				}
+			}).success(function(data) {
+				if ($scope.websiteStatus) {
+					$scope.websiteStatus = "icon-check"
+				}
+			})
 			if ($scope.postTwitter) {
 				$scope.twitterStatus = "icon-spinner icon-spin"
 				$http.put('/api/twittersend', {
@@ -215,13 +219,12 @@ function alertCreateCtrl($scope, $resource, $http) {
 				})
 			}
 			if ($scope.postSMS) {
-
 				var groupToSend = _.findWhere($scope.groupResult.data, {
 					send : true
 				})
 				var recipients = [];
 
-				console.log(groupToSend.recipients[0])
+				//console.log(groupToSend.recipients[0])
 				$.each(groupToSend.recipients, function(i, value) {
 					recipients.push(value.number);
 				})
@@ -266,12 +269,12 @@ function alertCtrl($scope, $resource, $http) {
 
 	$scope.archive = function() {
 		var alerts = $scope.alertResult.data
-		console.log(alerts)
+		//console.log(alerts)
 		$scope.alertResults = [];
 		angular.forEach(alerts, function(alert) {
 			console.log('for')
 			if (!alert.alertStatus) {
-				console.log('true')
+			//	console.log('true')
 				var url = '/api/alerts/' + alert._id;
 				$http.put(url, {
 					params : {
