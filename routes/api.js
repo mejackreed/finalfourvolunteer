@@ -199,8 +199,8 @@ exports.alertsend = function(req, res) {
 exports.smssend = function(req, res) {
 	var message = req.body.data.message
 	var recipients = req.body.data.recipients
-	console.log(message)
-	console.log(recipients)
+	//console.log(message)
+	//console.log(recipients)
 	var i = 1;
 	_.each(recipients, function(rec) {
 		sendSMSMessage(message, rec, i)
@@ -212,28 +212,6 @@ exports.smssend = function(req, res) {
 	res.jsonp({
 		data : 'success'
 	})
-}
-function sss() {
-	client.sendSms({
-		to : '+14043763550', // Any number Twilio can deliver to
-		from : '+16786819857', // A number you bought from Twilio and can use for outbound communication
-		body : 'word to your mother.' // body of the SMS message
-
-	}, function(err, responseData) {//this function is executed when a response is received from Twilio
-		console.log(err)
-		if (!err) {// "err" is an error received during the request, if any
-
-			// "responseData" is a JavaScript object containing data received from Twilio.
-			// A sample response from sending an SMS message is here (click "JSON" to see how the data appears in JavaScript):
-			// http://www.twilio.com/docs/api/rest/sending-sms#example-1
-
-			console.log(responseData.from);
-			// outputs "+14506667788"
-			console.log(responseData.body);
-			// outputs "word to your mother."
-
-		}
-	});
 }
 
 function sendSMSMessage(message, recipient, i) {
