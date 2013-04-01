@@ -1,7 +1,6 @@
 /**
  * Module dependencies.
  */
-//var flash = require('connect-flash');
 
 var express = require('express'), mongoose = require("mongoose"), routes = require('./routes'), api = require('./routes/api'), passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
@@ -13,17 +12,6 @@ var Schema = mongoose.Schema, passportLocalMongoose = require('passport-local-mo
 var app = module.exports = express();
 
 var uristring = process.env.MONGODB_URI || process.env.MONGOLAB_URI || 'mongodb://localhost/FinalFourVolunteer';
-var mongoOptions = {
-	db : {
-		safe : true
-	}
-};
-var dbconnect = mongoose.connect(uristring, mongoOptions, function(err, res) {
-
-});
-var dboptions = {
-	mongoose_connection : dbconnect.connections[0]
-};
 
 
 app.configure(function() {
@@ -40,9 +28,8 @@ app.configure(function() {
 		secret : process.env.SECRET,
 		maxAge : new Date(Date.now() + 3600000),
 		store : new MongoStore({
-			mongoose_connection : dbconnect.connections[0]
-		}, function(err) {
-			console.log(err || 'connect-mongodb setup ok');
+			url : uristring,
+			auto_reconnect : true
 		})
 	}));
 	app.use(flash());
@@ -69,7 +56,6 @@ var Account = require('./models/account');
 passport.use(Account.createStrategy());
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
-
 
 app.get('/', routes.index);
 app.get('/map', routes.map);
